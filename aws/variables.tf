@@ -43,7 +43,7 @@ variable "write_kubeconfig" {
 }
 
 variable "kubeconfig_path" {
-  default = "./"
+  default = "./kubeconfig_cert-manager-cluster"
 }
 
 variable "cert_manager_version" {
