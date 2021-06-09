@@ -70,7 +70,7 @@ module "eks" {
 
 provider "helm" {
   kubernetes {
-    config_path = var.kubeconfig_path ## check this
+    config_path = "${path.module}/kubeconfig_cert-manager-cluster" ## check this
   }
 }
 
@@ -87,18 +87,18 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-# resource "helm_release" "ingress_nginx" {
-#   name       = "ingress-nginx"
-#   repository = "https://kubernetes.github.io/ingress-nginx"
-#   chart      = "ingress-nginx"
-#   namespace  = "default"
-# }
+resource "helm_release" "ingress_nginx" {
+  name       = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  namespace  = "default"
+}
 
-# data "kubernetes_service" "ingress_service" {
-#   metadata {
-#     name = "ingress-nginx" ## replace with what we see for the first time after running
-#   }
-# }
+data "kubernetes_service" "ingress_service" {
+  metadata {
+    name = "ingress-nginx-controller"
+  }
+}
 
 # resource "aws_route53_zone" "test" {
 #   name = "test.example.com" ## repalce with one Zee gives, replace resource with data
@@ -117,7 +117,7 @@ resource "helm_release" "cert-manager" {
 #   value       = module.eks.kubeconfig
 # }
 
-# output "loadbalancer_hostname" {
-#   description = "hostname of the load balancer."
-#   value       = data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname
-# }
+output "loadbalancer_hostname" {
+  description = "hostname of the load balancer."
+  value       = data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname
+}
