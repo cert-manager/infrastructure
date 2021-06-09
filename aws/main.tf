@@ -70,7 +70,13 @@ module "eks" {
 
 provider "helm" {
   kubernetes {
-    config_path = "${path.module}/kubeconfig_cert-manager-cluster" ## check this
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    exec {
+      api_version = "client.authentication.k8s.io/v1alpha1"
+      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
+      command     = "aws"
+    }
   }
 }
 
@@ -98,6 +104,9 @@ data "kubernetes_service" "ingress_service" {
   metadata {
     name = "ingress-nginx-controller"
   }
+  depends_on = [
+    helm_release.ingress_nginx
+  ]
 }
 
 # resource "aws_route53_zone" "test" {
