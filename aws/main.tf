@@ -121,7 +121,3 @@ resource "aws_route53_record" "ingress_record" {
   records = [data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname]
 }
 
-output "loadbalancer_hostname" {
-  description = "hostname of the load balancer."
-  value       = data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname
-}
