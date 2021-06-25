@@ -2,6 +2,13 @@ variable "region" {
   default = "us-east-2"
 }
 
+variable "credentials" {
+  type = object({
+    access_key = string
+    secret_key = string
+  })
+}
+
 variable "vpc_name" {
   default = "k8s-vpc"
 }
