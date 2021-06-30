@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     bucket = "terraform-state-eks-cert-manager"
     key    = "global/s3/terraform.tfstate"
-    region = var.region
+    region = "us-east-2"
   }
 }
 
