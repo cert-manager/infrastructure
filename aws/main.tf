@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "terraform-state-eks-cert-manager"
+    key    = "global/s3/terraform.tfstate"
+    region = "us-east-2"
+  }
+}
+
 provider "aws" {
   region = var.region
 }
