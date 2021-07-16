@@ -1,5 +1,6 @@
 variable "project_id" {
   description = "The project ID to host the cluster in"
+  default = "interview-arsh-2a8f60"
 }
 variable "cluster_name" {
   description = "The name for the GKE cluster"
@@ -28,4 +29,8 @@ variable "ip_range_pods_name" {
 variable "ip_range_services_name" {
   description = "The secondary ip range to use for services"
   default     = "ip-range-services"
+}
+
+variable "cert_manager_version" {
+  default = "v1.3.1"
 }

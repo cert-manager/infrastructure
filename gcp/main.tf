@@ -101,12 +101,12 @@ data "kubernetes_service" "ingress_service" {
 }
 
 data "google_dns_managed_zone" "dns_zone" {
-  name = "gcp.e2e-tests.cert-manager.io"
+  name = "arsh.future.k8s.careers."
 }
 
 resource "google_dns_record_set" "ingress_record" {
   provider     = "google-beta"
-  managed_zone = google_dns_managed_zone.parent-zone.name
+  managed_zone = data.google_dns_managed_zone.dns_zone.name
   name         = "*.${data.google_dns_managed_zone.dns_zone.name}"
   type         = "CNAME"
   rrdatas      = [data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname]
