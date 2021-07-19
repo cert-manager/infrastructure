@@ -61,23 +61,19 @@ module "gke" {
 }
 
 # Retrieve an access token as the Terraform runner
-data "google_client_config" "provider" {}
-data "google_container_cluster" "my_cluster" {
-  name     = "${var.cluster_name}-${var.env_name}"
-  location = var.region
-}
+data "google_client_config" "default" {}
 
 provider "kubernetes" {
-  host                   = "https://${data.google_container_cluster.my_cluster.endpoint}"
-  token                  = data.google_client_config.provider.access_token
-  cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
+  host                   = "https://${module.gke.endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
 }
 
 provider "helm" {
   kubernetes {
-    host                   = "https://${data.google_container_cluster.my_cluster.endpoint}"
-    token                  = data.google_client_config.provider.access_token
-    cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
+    host                   = "https://${module.gke.endpoint}"
+    token                  = data.google_client_config.default.access_token
+    cluster_ca_certificate = base64decode(module.gke.ca_certificate)
   }
 }
 
@@ -94,21 +90,28 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-data "kubernetes_service" "ingress_service" {
-  metadata {
-    name = "ingress-gce-controller"
-  }
-}
+// i think we'll need to run cluster and then see the name of the existing ingress
+// no ingress was there
+// does this mean that the aws one created one for us automatically cause we used nginx-ingress 
+// but here we'll have to create one ourselves?
+# data "kubernetes_service" "ingress_service" {
+#   metadata {
+#     name = "ingress-gce-controller"
+#   }
+# }
 
 data "google_dns_managed_zone" "dns_zone" {
-  name = "arsh.future.k8s.careers."
+  name    = "k8s-careers-arsh"
+  project = var.project_id
 }
 
-resource "google_dns_record_set" "ingress_record" {
-  provider     = "google-beta"
-  managed_zone = data.google_dns_managed_zone.dns_zone.name
-  name         = "*.${data.google_dns_managed_zone.dns_zone.name}"
-  type         = "CNAME"
-  rrdatas      = [data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname]
-  ttl          = 60
-}
+// uncomment this when we've figured out k8s service thing 
+// since it uses that
+# resource "google_dns_record_set" "ingress_record" {
+#   provider     = "google-beta"
+#   managed_zone = data.google_dns_managed_zone.dns_zone.name
+#   name         = "*.${data.google_dns_managed_zone.dns_zone.name}"
+#   type         = "CNAME"
+#   rrdatas      = [data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname]
+#   ttl          = 60
+# }
