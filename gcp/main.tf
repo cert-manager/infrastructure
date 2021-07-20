@@ -1,6 +1,7 @@
 provider "google" {
   region = var.region
 }
+
 module "gke_auth" {
   source       = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   depends_on   = [module.gke]
@@ -8,10 +9,12 @@ module "gke_auth" {
   location     = module.gke.location
   cluster_name = module.gke.name
 }
+
 resource "local_file" "kubeconfig" {
   content  = module.gke_auth.kubeconfig_raw
   filename = "kubeconfig_${var.env_name}"
 }
+
 module "gcp-network" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 2.5"
@@ -90,28 +93,103 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-// i think we'll need to run cluster and then see the name of the existing ingress
-// no ingress was there
-// does this mean that the aws one created one for us automatically cause we used nginx-ingress 
-// but here we'll have to create one ourselves?
-# data "kubernetes_service" "ingress_service" {
-#   metadata {
-#     name = "ingress-gce-controller"
-#   }
-# }
+resource "google_compute_global_address" "ingress_global_ip" {
+  name    = "ingress-ip"
+  project = var.project_id
+}
+
+resource "kubernetes_deployment" "test_deployment" {
+  metadata {
+    name      = "test-deployment"
+    namespace = "default"
+  }
+  spec {
+    replicas = "1"
+    selector {
+      match_labels = {
+        app = "test-deployment"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          "app" = "test-deployment"
+        }
+      }
+      spec {
+        container {
+          image = "gcr.io/google-samples/node-hello:1.0"
+          name  = "hello"
+          env {
+            name  = "PORT"
+            value = "8080"
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "test_service" {
+  metadata {
+    name = "test-service"
+  }
+  spec {
+    selector = kubernetes_deployment.test_deployment.spec[0].template[0].metadata[0].labels
+    port {
+      port        = 8080
+      target_port = 8080
+    }
+    type = "NodePort"
+  }
+}
+
+resource "kubernetes_ingress" "test_ingress" {
+  metadata {
+    name = "test-ingress"
+    annotations = {
+      "kubernetes.io/ingress.global-static-ip-name" = google_compute_global_address.ingress_global_ip.name
+      "acme.cert-manager.io/http01-edit-in-place"   = "true"
+    }
+  }
+
+  spec {
+    backend {
+      service_name = "test-service"
+      service_port = 8080
+    }
+
+    rule {
+      http {
+        path {
+          backend {
+            service_name = "test-service"
+            service_port = 8080
+          }
+
+          path = "/*"
+        }
+      }
+    }
+
+    # tls {
+    #   secret_name = "tls-secret"
+    #   hosts       = [trimsuffix("test-ingress.${data.google_dns_managed_zone.dns_zone.dns_name}", ".")]
+    # }
+  }
+}
 
 data "google_dns_managed_zone" "dns_zone" {
   name    = "k8s-careers-arsh"
   project = var.project_id
 }
 
-// uncomment this when we've figured out k8s service thing 
-// since it uses that
-# resource "google_dns_record_set" "ingress_record" {
-#   provider     = "google-beta"
-#   managed_zone = data.google_dns_managed_zone.dns_zone.name
-#   name         = "*.${data.google_dns_managed_zone.dns_zone.name}"
-#   type         = "CNAME"
-#   rrdatas      = [data.kubernetes_service.ingress_service.status.0.load_balancer.0.ingress.0.hostname]
-#   ttl          = 60
-# }
+resource "google_dns_record_set" "ingress_record" {
+  provider     = google-beta
+  managed_zone = data.google_dns_managed_zone.dns_zone.name
+  name         = "test-ingress.${data.google_dns_managed_zone.dns_zone.dns_name}"
+  type         = "A"
+  rrdatas      = [google_compute_global_address.ingress_global_ip.address]
+  ttl          = 60
+  project      = var.project_id
+}

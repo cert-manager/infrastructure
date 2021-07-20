@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "The project ID to host the cluster in"
-  default = "interview-arsh-2a8f60"
+  default     = "interview-arsh-2a8f60"
 }
 variable "cluster_name" {
   description = "The name for the GKE cluster"
