@@ -187,7 +187,7 @@ data "google_dns_managed_zone" "dns_zone" {
 resource "google_dns_record_set" "ingress_record" {
   provider     = google-beta
   managed_zone = data.google_dns_managed_zone.dns_zone.name
-  name         = "test-ingress.${data.google_dns_managed_zone.dns_zone.dns_name}"
+  name         = "*.${data.google_dns_managed_zone.dns_zone.dns_name}"
   type         = "A"
   rrdatas      = [google_compute_global_address.ingress_global_ip.address]
   ttl          = 60
