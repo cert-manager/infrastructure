@@ -36,4 +36,4 @@ terraform.rc
 
 # misc
 .terraform.lock.hcl
-kubeconfig_cert-manager-cluster
+*/kubeconfig_cert-manager-cluster
