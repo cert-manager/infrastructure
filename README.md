@@ -56,11 +56,28 @@ Maintainers should also have access to the [CNCF slack](https://cloud-native.sla
 
 ### Netlify
 
-Used for deploying the cert-manager website. Configured both in the Netlify console
-and in the website repo.
+We have two Netlify sites, both on different accounts.
 
-Access to the console is currently through credentials stored in Jetstack's 1Password. This will be migrated
-to include access for open-source contributors.
+`cert-manager.netlify.app` is the main Netlify site and is tied to a free-tier
+account.
+
+It is used to publish the website on <https://cert-manager.io>. It also creates
+a preview site for PRs that are opened for the `master` branch; the preview link
+can be seen in the GitHub checks at the bottom of the PR UI. It is configured
+through the Netlify console UI and also through the website repository
+(`_redirects` file).
+
+Access to the Netlify console UI for this account is currently only possible
+through credentials stored in Jetstack's 1Password. This will be migrated to
+include access for open-source contributors.
+
+`cert-manager-website.netlify.app` was created because we don't know how to
+configure the main site. The only purpose of this secondary account is to create
+a preview on PRs that are created on branches that aren't `master`. This is
+useful for being able to preview `release-next` PRs.
+
+As for the main account, the Netlify console UI for this account is currently
+only possible through credentials stored in Jetstack's 1Password.
 
 ### Algolia
 
