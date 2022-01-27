@@ -95,3 +95,10 @@ At the very least, all recognised cert-manager maintainers should be listed in t
 This can be added to by existing maintainers, such as in [this PR](https://github.com/cncf/foundation/pull/213).
 
 There are also CNCF mailing lists, although we don't currently have an exhaustive list of which ones are relevant.
+
+### `@CertManager` Twitter Account
+
+This twitter account isn't currently used, but it exists and we have access to it if we want to start using it.
+
+As with other accounts, twitter credentials are currently stored in Jetstack password managers and will have to be moved to
+an open-source solution.
