@@ -119,3 +119,12 @@ This twitter account isn't currently used, but it exists and we have access to i
 
 As with other accounts, twitter credentials are currently stored in Jetstack password managers and will have to be moved to
 an open-source solution.
+
+### cert-manager YouTube Account
+
+All cert-manager maintainers should be able to access the cert-manager [brand YouTube account](https://www.youtube.com/channel/UCNPMkzGrAsQxVUFMPn7n88Q)
+if desired. Access is managed by existing maintainers who can administer that account by visiting the
+[Brand Accounts](https://myaccount.google.com/brandaccounts) page.
+
+Note that to upload videos or do other actions, you need to click on your profile in the top right of YouTube
+and "switch account" to the cert-manager brand account.
