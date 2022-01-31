@@ -68,8 +68,9 @@ through the Netlify console UI and also through the website repository
 (`_redirects` file).
 
 Access to the Netlify console UI for this account is currently only possible
-through credentials stored in Jetstack's 1Password. This will be migrated to
-include access for open-source contributors.
+through credentials stored in Jetstack's 1Password (note: the cert-manager team
+at Jetstack does not have access to these credentials at Jetstack). This will be
+migrated to include access for open-source contributors.
 
 `cert-manager-website.netlify.app` was created because we don't know how to
 configure the main site. The only purpose of this secondary account is to create
