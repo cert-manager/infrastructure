@@ -129,3 +129,12 @@ if desired. Access is managed by existing maintainers who can administer that ac
 
 Note that to upload videos or do other actions, you need to click on your profile in the top right of YouTube
 and "switch account" to the cert-manager brand account.
+
+### Zapier account
+
+The zapier account has two zaps:
+- _Upload new Google Drive videos that are copied into 'mael-zapier-upload-to-youtube' to the cert-manager YouTube channel_, and
+- _Send a message on Slack (#cert-manager) when a new video is uploaded to the cert-manager Youtube channel_.
+
+As with other accounts, zapier credentials are currently stored in Jetstack password managers and will have to be moved to
+an open-source solution.
