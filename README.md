@@ -88,7 +88,10 @@ which is Algolia's free tool provided open-source projects.
 Configured through [a public JSON file](https://github.com/algolia/docsearch-configs/blob/master/configs/cert-manager.json).
 
 An account might be needed to trigger a re-indexing or possibly for other tasks. [`@munnerz`](https://github.com/munnerz/) has
-an account, but others might be usable.
+an account, which we might need to get access to.
+
+The search API key is public, and is `e335fb22ca2fd2d96b4ba95b703430eb`. An example of use for the legacy docsearch v2 API is in
+[`search.js`](https://github.com/cert-manager/website/blob/6df6fd0986b5083a19fdbd597e2256f6627a274e/assets/js/search.js).
 
 ### Google Cloud Platform
 
