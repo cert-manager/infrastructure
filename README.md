@@ -141,3 +141,11 @@ The zapier account has two zaps:
 
 As with other accounts, zapier credentials are currently stored in Jetstack password managers and will have to be moved to
 an open-source solution.
+
+### TestGrid
+
+Testgrid is hosted [here](https://testgrid.k8s.io/jetstack-cert-manager-master) under the old org name.
+Configuration is updated with PRs like [this one](https://github.com/kubernetes/test-infra/pull/25229), which are generated
+by [this prow job](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/jobs/testing/testing-trusted.yaml#L63-L89).
+
+There's also testgrid config in the [testing repo](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/testgrid/dashboards.yaml).
