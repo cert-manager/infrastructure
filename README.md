@@ -56,29 +56,21 @@ Maintainers should also have access to the [CNCF slack](https://cloud-native.sla
 
 ### Netlify
 
-We have two Netlify sites, both on different accounts.
+We currently have two Netlify sites, both on different accounts.
 
-`cert-manager.netlify.app` is the main Netlify site and is tied to a free-tier
-account.
+`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account. The cert-manager maintainers at
+Jetstack can get access but this isn't available to open-source maintainers outside of Jetstack because the same org account is used
+for other Jetstack-internal sites.
 
-It is used to publish the website on <https://cert-manager.io>. It also creates
-a preview site for PRs that are opened for the `master` branch; the preview link
-can be seen in the GitHub checks at the bottom of the PR UI. It is configured
-through the Netlify console UI and also through the website repository
-(`_redirects` file).
+We will migrate away from the Jetstack org when possible.
 
-Access to the Netlify console UI for this account is currently only possible
-through credentials stored in Jetstack's 1Password (note: the cert-manager team
-at Jetstack does not have access to these credentials at Jetstack). This will be
-migrated to include access for open-source contributors.
+The Jetstack account is used to publish the website on <https://cert-manager.io>. It also creates a preview site for PRs that are opened
+against the `master` branch; the preview link can be seen in the GitHub checks at the bottom of the PR UI. It is configured though
+through the Netlify console UI and also through the website repository (`_redirects` file).
 
-`cert-manager-website.netlify.app` was created because we don't know how to
-configure the main site. The only purpose of this secondary account is to create
-a preview on PRs that are created on branches that aren't `master`. This is
-useful for being able to preview `release-next` PRs.
-
-As for the main account, the Netlify console UI for this account is currently
-only possible through credentials stored in Jetstack's 1Password.
+Our secondary account is `cert-manager-website.netlify.app`, which will be the destination for the site after it's moved away from the
+Jetstack org. This account's credentials are stored in Jetstack 1password and all Jetstack cert-manager maintainers have access to this
+account. Credentials will be moved into a more open-source-friendly location along with other credentials.
 
 ### Algolia
 
