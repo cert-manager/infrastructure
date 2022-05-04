@@ -145,3 +145,19 @@ Configuration is updated with PRs like [this one](https://github.com/kubernetes/
 by [this prow job](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/jobs/testing/testing-trusted.yaml#L63-L89).
 
 There's also testgrid config in the [testing repo](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/testgrid/dashboards.yaml).
+
+### Open Collective
+
+On 4 May 2022 we opened an [Open Collective account for the cert-manager organization][Open Collective cert-manager page]
+in order to [manage the funds][GSoD: Grants for organizations] for our [Google Season of Docs 2022 project][].
+
+We set up the account as an _Open Source Collective_,  with Open Collective as our fiscal host.
+This means they hold funds on our behalf.
+No fees from Open Source Collective will apply to our GSoD grant payment.
+You can read more at [GSoD: Grants for organizations][].
+
+At time of writing [Richard Wall](https://github.com/wallrj) and [Mael Valais](https://github.com/maelvls) are administrators.
+
+[Open Collective cert-manager page]: https://opencollective.com/cert-manager
+[Google Season of Docs 2022 project]: https://cert-manager.io/docs/contributing/google-season-of-docs/2022/improve-navigation-and-structure/index
+[GSoD: Grants for organizations]: https://developers.google.com/season-of-docs/docs/org-payments
