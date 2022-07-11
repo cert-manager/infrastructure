@@ -83,11 +83,13 @@ which is Algolia's free tool provided open-source projects.
 
 Configured through [a public JSON file](https://github.com/algolia/docsearch-configs/blob/master/configs/cert-manager.json).
 
-An account might be needed to trigger a re-indexing or possibly for other tasks. [`@munnerz`](https://github.com/munnerz/) has
-an account, which we might need to get access to.
+The crawler can be configured here: [https://crawler.algolia.com/admin/crawlers](https://crawler.algolia.com/admin/crawlers)
 
-The search API key is public, and is `e335fb22ca2fd2d96b4ba95b703430eb`. An example of use for the legacy docsearch v2 API is in
-[`search.js`](https://github.com/cert-manager/website/blob/6df6fd0986b5083a19fdbd597e2256f6627a274e/assets/js/search.js).
+The Algolia app can be configured here: [https://www.algolia.com/apps/01YP6XYAE7/dashboard](https://www.algolia.com/apps/01YP6XYAE7/dashboard)
+
+The Algolia API Key must be configured as an environment variable in Netlify.
+
+The other Algolia settings can be configured here: [https://github.com/cert-manager/website/blob/master/netlify.toml](https://github.com/cert-manager/website/blob/master/netlify.toml)
 
 ### Google Cloud Platform
 
