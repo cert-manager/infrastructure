@@ -76,6 +76,13 @@ Our secondary account is `cert-manager-website.netlify.app`, which will be the d
 Jetstack org. This account's credentials are stored in Jetstack 1password and all Jetstack cert-manager maintainers have access to this
 account. Credentials will be moved into a more open-source-friendly location along with other credentials.
 
+### ArtifactHub
+
+We distribute our built helm charts [on ArtifactHub](https://artifacthub.io/packages/helm/cert-manager/cert-manager).
+
+Login details are currently stored in Jetstack 1password - it's a goal for us to store these details in a more open-source-friendly way
+down the road.
+
 ### Algolia
 
 Provides an API for searching the cert-manager website. We're in [DocSearch](https://docsearch.algolia.com/docs/what-is-docsearch/)
