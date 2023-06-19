@@ -58,6 +58,10 @@ Administration of both is done by Kubernetes slack admins.
 
 Maintainers should also have access to the [CNCF slack](https://cloud-native.slack.com/archives/C08PSKWQL), although this isn't used much.
 
+We also have the Slack user group `@cert-manager-maintainers` defined in [kubernetes/community#7360](https://github.com/kubernetes/community/issues/7360).
+The list of Slack usernames in this file was extracted from the GitHub usernames and there
+might need some adjustments since the Slack usernames are private to each Slack user.
+
 ### Netlify
 
 We currently have two Netlify sites, both on different accounts.
