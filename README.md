@@ -142,19 +142,7 @@ if desired. Access is managed by existing maintainers who can administer that ac
 Note that to upload videos or do other actions, you need to click on your profile in the top right of YouTube
 and "switch account" to the cert-manager brand account.
 
-### Zapier account
-
-> **Updated 30 June 2022:** Mael disabled zap (1) and (2). Both zaps are constantly failing
-> ([example email](https://groups.google.com/g/cert-manager-maintainers/c/-EfO3ar03vI)) with the
-> message "you have exceeded your quota". Zapier is on it.
-
-The zapier account has two zaps:
-
-1. _Upload new Google Drive videos that are copied into 'mael-zapier-upload-to-youtube' to the cert-manager YouTube channel_, and
-2. _Send a message on Slack (#cert-manager) when a new video is uploaded to the cert-manager Youtube channel_.
-
-As with other accounts, zapier credentials are currently stored in Jetstack password managers and will have to be moved to
-an open-source solution.
+Currently, videos from biweekly meetings are being manually uploaded to YouTube by maintainers.
 
 ### TestGrid
 
