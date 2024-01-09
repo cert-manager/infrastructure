@@ -56,6 +56,19 @@ in cert-manager development. It's a place for people to ask questions and get up
 
 Owners should be those in the `cert-manager-maintainers` group, but anyone is free to join the group.
 
+### Quay
+
+Currently, cert-manager container images are hosted on quay.io under the Jetstack organization which is controlled by Venafi. Admin
+credentials are available on Venafi's 1password.
+
+It's a goal of the cert-manager project to migrate images to be hosted under a `cert-manager` organization, but this introduces
+non-trivial operational challenges which we'd have to face to perform a migration.
+
+cert-manager container images are pushed to Quay via a robot account which is configured in Google Cloud Build.
+
+Other projects (e.g. trust-manager, csi-driver, etc) tend to be built locally and pushed using local credentials. It's a long-term
+ambition to change this in all instances.
+
 ### Slack
 
 We have 2 Slack channels on Kubernetes slack:
