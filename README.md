@@ -126,12 +126,17 @@ This can be added to by existing maintainers, such as in [this PR](https://githu
 
 There are also CNCF mailing lists, although we don't currently have an exhaustive list of which ones are relevant.
 
-### `@CertManager` Twitter Account
+### Social Media
 
-This twitter account isn't currently used, but it exists and we have access to it if we want to start using it.
+Credentials for all social media accounts are stored in Venafi's 1password and will be migrated to an open-source alternative in time.
 
-As with other accounts, twitter credentials are currently stored in Jetstack password managers and will have to be moved to
-an open-source solution.
+#### Twitter / X
+
+[`@CertManager`](https://twitter.com/CertManager/) is used by maintainers to tweet about important releases or community updates.
+
+#### Mastodon / infosec.exchange
+
+[`@CertManager@infosec.exchange`](https://infosec.exchange/@CertManager) is used by maintainers to toot about important releases or community updates.
 
 ### cert-manager YouTube Account
 
