@@ -9,13 +9,22 @@ All infrastructure required by the cert-manager project. This includes:
 - infrastructure-as-code (Terraform)
 - details of services used by the project
 
+## Important Note: Credentials
+
+Currently, where this document states that credentials are stored in 1password, this means Venafi's private 1password org.
+
+This is for legacy reasons, but it is convenient since these credentials are currently mostly used by cert-manager maintainers who
+work at Venafi.
+
+It's the policy of the cert-manager project that these credentials should live in a place where they can be accessed by any maintainer,
+no matter where they work. In time, all credentials stored in Venafi's 1password org will be moved to an open-source friendly location.
+
 ## Services We Use
 
 As a project, cert-manager relies on several external services for different tasks. Some require
 access controls, which should ideally be open to any recognised cert-manager maintainer.
 
-Here, we list any services we know about and the method by which we change / configure / interact
-with those services.
+Here, we list any services we know about and the method by which we change / configure / interact with those services.
 
 ### Google Groups: cert-manager-maintainers
 
@@ -66,26 +75,23 @@ might need some adjustments since the Slack usernames are private to each Slack 
 
 We currently have two Netlify sites, both on different accounts.
 
-`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account. The cert-manager maintainers at
-Jetstack can get access but this isn't available to open-source maintainers outside of Jetstack because the same org account is used
-for other Jetstack-internal sites.
+`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account, owned by Venafi. The cert-manager maintainers at
+Venafi can get access but this isn't available to other maintainers because the same org account is used for some Jetstack-internal sites.
 
-We will migrate away from the Jetstack org when possible.
+We will migrate away from the old org when possible.
 
-The Jetstack account is used to publish the website on <https://cert-manager.io>. It also creates a preview site for PRs that are opened
+This account is used to publish the website on <https://cert-manager.io>. It also creates a preview site for PRs that are opened
 against the `master` branch; the preview link can be seen in the GitHub checks at the bottom of the PR UI. It is configured though
 through the Netlify console UI and also through the website repository (`_redirects` file).
 
 Our secondary account is `cert-manager-website.netlify.app`, which will be the destination for the site after it's moved away from the
-Jetstack org. This account's credentials are stored in Jetstack 1password and all Jetstack cert-manager maintainers have access to this
-account. Credentials will be moved into a more open-source-friendly location along with other credentials.
+old org. This account's credentials are stored in Venafi's 1password org.
 
 ### ArtifactHub
 
 We distribute our built helm charts [on ArtifactHub](https://artifacthub.io/packages/helm/cert-manager/cert-manager).
 
-Login details are currently stored in Jetstack 1password - it's a goal for us to store these details in a more open-source-friendly way
-down the road.
+Login details are stored in Venafi 1password.
 
 ### Algolia
 
@@ -128,7 +134,7 @@ There are also CNCF mailing lists, although we don't currently have an exhaustiv
 
 ### Social Media
 
-Credentials for all social media accounts are stored in Venafi's 1password and will be migrated to an open-source alternative in time.
+Credentials for all social media accounts are stored in Venafi's 1password.
 
 #### Twitter / X
 
@@ -151,11 +157,12 @@ Currently, videos from biweekly meetings are being manually uploaded to YouTube 
 
 ### TestGrid
 
-Testgrid is hosted [here](https://testgrid.k8s.io/jetstack-cert-manager-master) under the old org name.
-Configuration is updated with PRs like [this one](https://github.com/kubernetes/test-infra/pull/25229), which are generated
-by [this prow job](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/jobs/testing/testing-trusted.yaml#L63-L89).
+Testgrid is hosted [here](https://testgrid.k8s.io/cert-manager) with dashboards for all supported releases.
 
-There's also testgrid config in the [testing repo](https://github.com/jetstack/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/testgrid/dashboards.yaml).
+Configuration is updated with PRs like [this one](https://github.com/kubernetes/test-infra/pull/25229), which are generated
+by [this prow job](https://github.com/cert-manager/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/jobs/testing/testing-trusted.yaml#L63-L89).
+
+There's also testgrid config in the [testing repo](https://github.com/cert-manager/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/testgrid/dashboards.yaml).
 
 ### Open Collective
 
