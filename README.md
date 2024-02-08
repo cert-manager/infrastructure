@@ -56,6 +56,14 @@ in cert-manager development. It's a place for people to ask questions and get up
 
 Owners should be those in the `cert-manager-maintainers` group, but anyone is free to join the group.
 
+### Mailing Lists: cncf-cert-manager-maintainers
+
+There's a [CNCF-hosted mailing list](https://lists.cncf.io/g/cncf-cert-manager-maintainers/directory) for cert-manager maintainers
+which uses groups.io
+
+It contains a mixture of CNCF people and cert-manager people. In the future it might be good to sync this mailing list with
+the cert-manager-maintainers Google group.
+
 ### Quay
 
 Currently, cert-manager container images are hosted on quay.io under the Jetstack organization which is controlled by Venafi. Admin
