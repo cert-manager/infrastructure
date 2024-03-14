@@ -8,7 +8,7 @@ terraform {
   #  path = "terraform.tfstate"
   # }
 
-  required_version = "= 1.6.1"
+  required_version = ">= 1.6.1"
 }
 
 provider "google" {
