@@ -1,7 +1,20 @@
 approvers:
 - munnerz
-- JoshVanL
+- joshvanl
+- wallrj
 - jakexks
-- irbekrm
 - maelvls
-- SgtCoDFish
+- irbekrm
+- sgtcodfish
+- inteon
+reviewers:
+- munnerz
+- joshvanl
+- wallrj
+- jakexks
+- maelvls
+- irbekrm
+- sgtcodfish
+- inteon
+- thatsmrtalbot
+- erikgb
