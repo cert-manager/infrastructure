@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket = "cert-manager-terraform-state"
-    prefix  = "terraform/state"
+    prefix = "terraform/state"
   }
 
   # backend "local" {
