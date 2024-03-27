@@ -29,6 +29,8 @@ resource "google_compute_instance" "guestbook" {
   machine_type = "n1-standard-1"
   zone         = format("%s-%s", local.gcp_region, "c")
 
+  tags = ["http-server", "https-server"]
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"

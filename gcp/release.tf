@@ -31,44 +31,6 @@ resource "google_project_iam_binding" "cert-manager-release_managers" {
 }
 
 #####
-## Define Cloud Storage bucket and related IAM permissions
-#####
-
-# The the GCS bucket that contains release artifacts
-resource "google_storage_bucket" "cert-manager-release" {
-  name     = "cert-manager-release"
-  location = "EU"
-
-  project = module.cert-manager-release.project_id
-}
-
-# Define list of users with objectViewer permission on the release bucket
-resource "google_storage_bucket_iam_binding" "cert-manager-release_object-viewers" {
-  bucket = google_storage_bucket.cert-manager-release.name
-  role   = "roles/storage.objectViewer"
-
-  # Allow release managers to view the release bucket objects
-  members = local.cert_manager_release_managers
-}
-
-# Define list of users with objectAdmin permission on the release bucket.
-resource "google_storage_bucket_iam_binding" "cert-manager-release_object-admins" {
-  bucket = google_storage_bucket.cert-manager-release.name
-  role   = "roles/storage.objectAdmin"
-
-  members = [
-    # Grant the GCB service account admin permissions on objects in the bucket.
-    # This grants full control of objects, including listing, creating,
-    # viewing, and deleting objects.
-    # objectCreator is not sufficient, as the tool may need to delete or
-    # overwrite existing files.
-    # More information on roles can be found here:
-    # https://cloud.google.com/iam/docs/understanding-roles#storage-roles
-    local.cert_manager_release_gcb_service_account,
-  ]
-}
-
-#####
 ## Define Cloud KMS keyring and related IAM permissions
 #####
 
@@ -76,7 +38,7 @@ resource "google_storage_bucket_iam_binding" "cert-manager-release_object-admins
 resource "google_kms_key_ring" "cert-manager-release" {
   name     = "cert-manager-release"
   project  = module.cert-manager-release.project_id
-  location = "europe-west1"
+  location = local.kms_location
 }
 
 # Create the actual key used to encrypt and decrypt secrets.
