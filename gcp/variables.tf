@@ -8,4 +8,8 @@ locals {
   ])
 
   gcp_region = "europe-west1"
+
+  gke_zonal_location = "europe-west1-b"
+  kms_location       = "europe-west1"
+  bucket_location    = "EU"
 }

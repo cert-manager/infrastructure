@@ -36,6 +36,10 @@ module "cert-manager-tests-trusted" {
   project_folder_id  = local.project_folder_id
   project_billing_id = local.cncf_project_billing_id
   project_owners     = local.cert_manager_release_managers
+  project_apis = toset([
+    "compute.googleapis.com",
+    "container.googleapis.com",
+  ])
 }
 
 module "cert-manager-tests-untrusted" {
@@ -46,4 +50,8 @@ module "cert-manager-tests-untrusted" {
   project_folder_id  = local.project_folder_id
   project_billing_id = local.cncf_project_billing_id
   project_owners     = local.cert_manager_release_managers
+  project_apis = toset([
+    "compute.googleapis.com",
+    "container.googleapis.com",
+  ])
 }
