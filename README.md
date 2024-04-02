@@ -133,9 +133,8 @@ The other Algolia settings can be configured here: [https://github.com/cert-mana
 
 Hosts test infrastructure, release infrastructure, past releases, and DNS for our domains.
 
-- Testing infrastructure is currently in Jetstack's org. Will be rebuilt in the CNCF GCP org.
-- Release infrastructure (under the `cert-manager-release` project) is in the Jetstack org, but CNCF's billing account. Org migration is [ongoing](https://github.com/cert-manager/release/issues/50).
-- DNS is currently in Jetstack's org under the cert-manager-io project. Should be moved to CNCF.
+- The infrastructure is managed by Terraform/ Tofu, in the `./gcp` directory of this repository (see [README](./gcp/README.md) for more details).
+- Some resources are still running in the Jetstack org, but we are actively moving them to the terraform in this repository.
 
 ### GitHub Org
 
