@@ -19,6 +19,11 @@ variable "cluster_description" {
   description = "The description of the GKE cluster"
   type        = string
 }
+variable "cluster_enable_workload_identity" {
+  description = "Whether to attach a workload pool to all Kubernetes service accounts"
+  type        = bool
+  default     = false
+}
 variable "node_config" {
   description = "The node configuration for the GKE cluster"
   type = object({
@@ -30,4 +35,8 @@ variable "node_config" {
     disk_type    = string
     preemptible  = bool
   })
+}
+
+locals {
+  workload_pool = var.cluster_enable_workload_identity ? "${var.project_id}.svc.id.goog" : null
 }
