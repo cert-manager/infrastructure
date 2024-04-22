@@ -11,6 +11,9 @@ module "cert-manager-general" {
   project_folder_id  = local.project_folder_id
   project_billing_id = local.cncf_project_billing_id
   project_owners     = local.cert_manager_release_managers
+  project_apis = toset([
+    "dns.googleapis.com"
+  ])
 }
 
 module "cert-manager-release" {
