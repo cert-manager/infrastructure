@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "5.20.0"
+      version = "5.24.0"
     }
   }
   required_version = ">= 1.6.1"
@@ -98,6 +98,13 @@ resource "google_container_cluster" "cluster" {
     }
   }
 
+  dynamic "workload_identity_config" {
+    for_each = local.workload_pool != null ? [1] : []
+    content {
+      workload_pool = local.workload_pool
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       min_master_version
@@ -135,9 +142,6 @@ resource "google_container_node_pool" "worker_pool" {
     gcfs_config {
       enabled = true
     }
-    fast_socket {
-      enabled = true
-    }
     gvnic {
       enabled = true
     }
@@ -152,6 +156,13 @@ resource "google_container_node_pool" "worker_pool" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+
+    dynamic "workload_metadata_config" {
+      for_each = var.cluster_enable_workload_identity ? [1] : []
+      content {
+        mode = "GKE_METADATA"
+      }
+    }
   }
 
   # changing initial_node_count forces recreation

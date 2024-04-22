@@ -17,7 +17,6 @@ resource "google_service_account" "testgrid-updater" {
   project      = module.cert-manager-tests-trusted.project_id
 }
 
-/*
 # This IAM binding allows testgrid-updater Kubernetes service account in
 # test-pods namespace to impersonate testgrid-updater Google Service Account.
 # Note that the member value includes Kubernetes namespace and service account
@@ -27,7 +26,6 @@ resource "google_service_account_iam_binding" "testgrid-updater-workload-identit
   service_account_id = google_service_account.testgrid-updater.name
   role               = "roles/iam.workloadIdentityUser"
   members = [
-    "serviceAccount:${module.cert-manager-tests-trusted.project_id}.svc.id.goog[test-pods/testgrid-updater]"
+    "serviceAccount:${module.prow-cluster-trusted.workload_pool}[test-pods/testgrid-updater]"
   ]
 }
-*/

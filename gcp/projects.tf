@@ -39,6 +39,7 @@ module "cert-manager-tests-trusted" {
   project_apis = toset([
     "compute.googleapis.com",
     "container.googleapis.com",
+    "artifactregistry.googleapis.com",
   ])
 }
 
