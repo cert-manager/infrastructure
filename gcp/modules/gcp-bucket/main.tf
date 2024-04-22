@@ -14,7 +14,7 @@ resource "google_storage_bucket" "bucket" {
   location = var.location
   project  = var.project_id
 
-  uniform_bucket_level_access = true
+  uniform_bucket_level_access = var.uniform_bucket_level_access
   public_access_prevention    = var.bucket_prevent_public_access ? "enforced" : "inherited"
 
   versioning {

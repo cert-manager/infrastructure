@@ -30,3 +30,9 @@ variable "bucket_admins" {
   default = []
 }
 
+# TODO: remove this once we resolve the rclone issues
+# see https://github.com/cert-manager/cert-manager/pull/6906
+variable "uniform_bucket_level_access" {
+  type    = bool
+  default = true
+}

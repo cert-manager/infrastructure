@@ -15,6 +15,8 @@ module "release-bucket" {
   location    = local.bucket_location
   bucket_name = "cert-manager-release"
 
+  uniform_bucket_level_access = false
+
   bucket_viewers = local.cert_manager_release_managers
   bucket_admins = [
     # Grant the GCB service account admin permissions on objects in the bucket.
@@ -56,7 +58,10 @@ module "trusted-testgrid-bucket" {
     local.cert_manager_release_managers,
     [
       "serviceAccount:testgrid-canary@k8s-testgrid.iam.gserviceaccount.com",
-      "serviceAccount:updater@k8s-testgrid.iam.gserviceaccount.com"
+      "serviceAccount:updater@k8s-testgrid.iam.gserviceaccount.com",
+      # Temporary SA used for copy job, can be removed once we stop the job, which
+      # can be stopped once https://github.com/kubernetes/test-infra/pull/32455 is merged
+      "serviceAccount:project-771478705899@storage-transfer-service.iam.gserviceaccount.com",
     ],
   )
   bucket_admins = [
