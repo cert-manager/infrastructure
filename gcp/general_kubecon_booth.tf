@@ -25,6 +25,8 @@ resource "google_storage_bucket_iam_member" "bucket_access_policy" {
 
 // Taken from https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#terraform_1
 resource "google_compute_instance" "guestbook" {
+  project = module.cert-manager-general.project_id
+
   name         = "guestbook"
   machine_type = "n1-standard-1"
   zone         = format("%s-%s", local.gcp_region, "c")
@@ -58,5 +60,9 @@ resource "google_compute_instance" "guestbook" {
     scopes = ["cloud-platform"]
   }
 
-  project = module.cert-manager-general.project_id
+  lifecycle {
+    ignore_changes = [
+      metadata
+    ]
+  }
 }
