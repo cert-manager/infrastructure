@@ -15,8 +15,6 @@ module "release-bucket" {
   location    = local.bucket_location
   bucket_name = "cert-manager-release"
 
-  uniform_bucket_level_access = false
-
   bucket_viewers = local.cert_manager_release_managers
   bucket_admins = [
     # Grant the GCB service account admin permissions on objects in the bucket.
