@@ -77,6 +77,14 @@ cert-manager container images are pushed to Quay via a robot account which is co
 Other projects (e.g. trust-manager, csi-driver, etc) tend to be built locally and pushed using local credentials. It's a long-term
 ambition to change this in all instances.
 
+### Zoom
+
+We are using Zoom for the dev biweekly meetings. The CNCF pays for a Zoom pro account. The email is `cncf-certmanager-project@cncf.io`, and the password is in the Venafi 1Password in the vault `team-cert-manager`.
+
+### CNCF Calendar
+
+The dev biweekly meetings show on the [CNCF calendar]([https://www.cncf.io/calendar/](https://tockify.com/cncf.public.events/monthly?search=cert-manager)). This calendar is manually managed by the CNCF through the CNCF service desk. Changes to the invitations sent to `cert-manager-dev@googlegroups.com` need to be manually propagated by opening a ticket on the CNCF service desk.
+
 ### Slack
 
 We have 2 Slack channels on Kubernetes slack:
