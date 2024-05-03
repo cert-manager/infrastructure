@@ -98,7 +98,7 @@ resource "google_dns_record_set" "a-prow-infra-cert-manager-io" {
   managed_zone = google_dns_managed_zone.cert-manager-io.name
 
   name         = "prow.infra.cert-manager.io."
-  rrdatas      = ["34.76.102.196"]
+  rrdatas      = [google_compute_address.prow_loadbalancer_ip.address]
   ttl          = 300
   type         = "A"
 }
