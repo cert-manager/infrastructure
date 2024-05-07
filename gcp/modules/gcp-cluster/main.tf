@@ -82,7 +82,7 @@ resource "google_container_cluster" "cluster" {
 
   addons_config {
     http_load_balancing {
-      disabled = true
+      disabled = !var.cluster_enable_http_load_balancing
     }
 
     horizontal_pod_autoscaling {

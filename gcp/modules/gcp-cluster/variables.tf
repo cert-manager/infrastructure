@@ -24,6 +24,11 @@ variable "cluster_enable_workload_identity" {
   type        = bool
   default     = false
 }
+variable "cluster_enable_http_load_balancing" {
+  description = "Whether to enable the HTTP load balancing addon"
+  type        = bool
+  default     = false
+}
 variable "node_config" {
   description = "The node configuration for the GKE cluster"
   type = object({
