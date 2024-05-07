@@ -57,9 +57,6 @@ module "trusted-testgrid-bucket" {
     [
       "serviceAccount:testgrid-canary@k8s-testgrid.iam.gserviceaccount.com",
       "serviceAccount:updater@k8s-testgrid.iam.gserviceaccount.com",
-      # Temporary SA used for copy job, can be removed once we stop the job, which
-      # can be stopped once https://github.com/kubernetes/test-infra/pull/32455 is merged
-      "serviceAccount:project-771478705899@storage-transfer-service.iam.gserviceaccount.com",
     ],
   )
   bucket_admins = [
