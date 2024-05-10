@@ -158,37 +158,3 @@ resource "google_dns_record_set" "mx-cert-manager-io" {
   ttl  = 300
   type = "MX"
 }
-
-##########################################################
-# print-your-cert.cert-manager.io DNS records
-##########################################################
-
-resource "google_dns_record_set" "a-print-your-cert-cert-manager-io" {
-  project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
-
-  name         = "print-your-cert.cert-manager.io."
-  rrdatas      = ["35.241.231.131"]
-  ttl          = 300
-  type         = "A"
-}
-
-resource "google_dns_record_set" "a-guestbook-print-your-cert-cert-manager-io" {
-  project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
-
-  name         = "guestbook.print-your-cert.cert-manager.io."
-  rrdatas      = ["34.76.70.92"]
-  ttl          = 300
-  type         = "A"
-}
-
-resource "google_dns_record_set" "a-readonly-guestbook-print-your-cert-cert-manager-io" {
-  project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
-
-  name         = "readonly-guestbook.print-your-cert.cert-manager.io."
-  rrdatas      = ["34.76.70.92"]
-  ttl          = 300
-  type         = "A"
-}
