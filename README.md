@@ -9,16 +9,6 @@ All infrastructure required by the cert-manager project. This includes:
 - infrastructure-as-code (Terraform)
 - details of services used by the project
 
-## Important Note: Credentials
-
-Currently, where this document states that credentials are stored in 1password, this means Venafi's private 1password org.
-
-This is for legacy reasons, but it is convenient since these credentials are currently mostly used by cert-manager maintainers who
-work at Venafi.
-
-It's the policy of the cert-manager project that these credentials should live in a place where they can be accessed by any maintainer,
-no matter where they work. In time, all credentials stored in Venafi's 1password org will be moved to an open-source friendly location.
-
 ## Services We Use
 
 As a project, cert-manager relies on several external services for different tasks. Some require
@@ -64,10 +54,15 @@ which uses groups.io
 It contains a mixture of CNCF people and cert-manager people. In the future it might be good to sync this mailing list with
 the cert-manager-maintainers Google group.
 
+## 1Password
+
+Maintainers get access to the cert-manager team on 1Password and are equally given the "Owner" role.
+1Password offers a free team plan for open-source projects. The team URL is https://cert-manager.1password.com.
+
 ### Quay
 
 Currently, cert-manager container images are hosted on quay.io under the Jetstack organization which is controlled by Venafi. Admin
-credentials are available on Venafi's 1password.
+credentials are available on the cert-manager 1Password team.
 
 It's a goal of the cert-manager project to migrate images to be hosted under a `cert-manager` organization, but this introduces
 non-trivial operational challenges which we'd have to face to perform a migration.
@@ -79,7 +74,8 @@ ambition to change this in all instances.
 
 ### Zoom
 
-We are using Zoom for the dev biweekly meetings. The CNCF pays for a Zoom pro account. The email is `cncf-certmanager-project@cncf.io`, and the password is in the Venafi 1Password in the vault `team-cert-manager`.
+We are using Zoom for the dev biweekly meetings. The CNCF pays for a Zoom pro account. The email is `cncf-certmanager-project@cncf.io`,
+and the password is in the cert-manager 1Password team.
 
 ### CNCF Calendar
 
@@ -104,7 +100,7 @@ might need some adjustments since the Slack usernames are private to each Slack 
 
 We currently have two Netlify sites, both on different accounts.
 
-`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account, owned by Venafi. The cert-manager maintainers at
+`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account, owned by Venafi.The cert-manager maintainers at
 Venafi can get access but this isn't available to other maintainers because the same org account is used for some Jetstack-internal sites.
 
 We will migrate away from the old org when possible.
@@ -114,13 +110,13 @@ against the `master` branch; the preview link can be seen in the GitHub checks a
 through the Netlify console UI and also through the website repository (`_redirects` file).
 
 Our secondary account is `cert-manager-website.netlify.app`, which will be the destination for the site after it's moved away from the
-old org. This account's credentials are stored in Venafi's 1password org.
+old org. This account's credentials are stored in the cert-manager 1Password team.
 
 ### ArtifactHub
 
 We distribute our built helm charts [on ArtifactHub](https://artifacthub.io/packages/helm/cert-manager/cert-manager).
 
-Login details are stored in Venafi 1password.
+Login details are stored in the cert-manager 1Password team.
 
 ### Algolia
 
@@ -162,15 +158,19 @@ There are also CNCF mailing lists, although we don't currently have an exhaustiv
 
 ### Social Media
 
-Credentials for all social media accounts are stored in Venafi's 1password.
+Credentials for all social media accounts are stored in the cert-manager 1Password team.
 
 #### Twitter / X
 
-[`@CertManager`](https://twitter.com/CertManager/) is used by maintainers to tweet about important releases or community updates.
+[`@CertManager`](https://twitter.com/CertManager/) is used by maintainers to tweet about
+important releases or community updates. The password for the account is available in the
+cert-manager 1Password team.
 
 #### Mastodon / infosec.exchange
 
-[`@CertManager@infosec.exchange`](https://infosec.exchange/@CertManager) is used by maintainers to toot about important releases or community updates.
+[`@CertManager@infosec.exchange`](https://infosec.exchange/@CertManager) is used by maintainers
+to toot about important releases or community updates. The password for the account is available
+in the cert-manager 1Password team.
 
 ### cert-manager YouTube Account
 
