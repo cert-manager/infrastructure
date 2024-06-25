@@ -98,19 +98,14 @@ might need some adjustments since the Slack usernames are private to each Slack 
 
 ### Netlify
 
-We currently have two Netlify sites, both on different accounts.
+We currently have two Netlify sites, both on different organizations.
 
-`cert-manager.netlify.app` is the main Netlify site and is tied to Jetstack's organizational account, owned by Venafi.The cert-manager maintainers at
-Venafi can get access but this isn't available to other maintainers because the same org account is used for some Jetstack-internal sites.
+- The main site `cert-manager.netlify.app` (named `cert-manager.io`) is the main Netlify site and belongs to the organization "Jetstack Platform" which is owned and paid for by Venafi (it has the Pro tier). This organization is used to publish the website on https://cert-manager.io/. It also creates a preview site for PRs that are opened against the `master` branch; the preview link can be seen in the GitHub checks at the bottom of the PR UI. It is configured though through the Netlify console UI and also through the website repository (`_redirects` file).
+- The secondary site `cert-manager-website.netlify.app` (named `cert-manager-website`) belongs to the organization "cert-manager-maintainers" is uses the free Started plan. This site doesn't serve any purpose at the moment. It will be the destination for the site "[cert-manager.io](http://cert-manager.io/)" once we migrate it away from the "Jetstack Platform" organization. This account's credentials are stored in the cert-manager 1Password team.
 
-We will migrate away from the old org when possible.
+All cert-manager maintainers can get access to both organizations "Jetstack Platform" and "cert-manager-maintainers" by using the cert-manager 1Password. 
 
-This account is used to publish the website on <https://cert-manager.io>. It also creates a preview site for PRs that are opened
-against the `master` branch; the preview link can be seen in the GitHub checks at the bottom of the PR UI. It is configured though
-through the Netlify console UI and also through the website repository (`_redirects` file).
-
-Our secondary account is `cert-manager-website.netlify.app`, which will be the destination for the site after it's moved away from the
-old org. This account's credentials are stored in the cert-manager 1Password team.
+We will migrate the site [cert-manager.io](http://cert-manager.io/) away from the old org ("Jetstack Platform") to the new org ("cert-manager-maintainers") when possible.
 
 ### ArtifactHub
 
