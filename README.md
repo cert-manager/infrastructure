@@ -118,9 +118,9 @@ Login details are stored in the cert-manager 1Password team.
 Provides an API for searching the cert-manager website. We're in [DocSearch](https://docsearch.algolia.com/docs/what-is-docsearch/)
 which is Algolia's free tool provided open-source projects.
 
-The cert-manager maintainers have access to configure Algolia. Access is managed manually and can be granted by another maintainer.
+The cert-manager maintainers have access to configure Algolia through a login stored in the cert-manager 1Password team.
 
-Configured here: [https://crawler.algolia.com/admin/crawlers](https://crawler.algolia.com/admin/crawlers)
+Crawlers can be configured here: [https://crawler.algolia.com/admin/crawlers](https://crawler.algolia.com/admin/crawlers)
 
 The Algolia app (Team, API Keys) can be configured here: [https://www.algolia.com/apps/01YP6XYAE7/dashboard](https://www.algolia.com/apps/01YP6XYAE7/dashboard)
 
