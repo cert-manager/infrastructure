@@ -43,6 +43,16 @@ resource "google_dns_record_set" "a-prow-infra-cert-manager-io" {
   type         = "A"
 }
 
+resource "google_dns_record_set" "a-triage-infra-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "triage.infra.cert-manager.io."
+  rrdatas      = [google_compute_global_address.triage_loadbalancer_ip.address]
+  ttl          = 300
+  type         = "A"
+}
+
 resource "google_dns_record_set" "cname-oci-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
