@@ -33,6 +33,44 @@ resource "google_dns_record_set" "txt-netlify-challenge" {
   type         = "TXT"
 }
 
+resource "google_dns_record_set" "a-prow-infra-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "prow.infra.cert-manager.io."
+  rrdatas      = [google_compute_global_address.prow_loadbalancer_ip.address]
+  ttl          = 300
+  type         = "A"
+}
+
+resource "google_dns_record_set" "cname-oci-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "oci.cert-manager.io."
+  rrdatas      = ["cert-manager.docker.scarf.sh."]
+  ttl          = 300
+  type         = "CNAME"
+}
+
+resource "google_dns_record_set" "mx-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+  
+  name         = "cert-manager.io."
+  rrdatas = [
+    "1 aspmx.l.google.com.",
+    "5 alt1.aspmx.l.google.com.",
+    "5 alt2.aspmx.l.google.com.",
+    "10 alt3.aspmx.l.google.com.",
+    "10 alt4.aspmx.l.google.com.",
+  ]
+  ttl  = 300
+  type = "MX"
+}
+
+## Netlify DNS records
+
 resource "google_dns_record_set" "a-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
@@ -43,14 +81,14 @@ resource "google_dns_record_set" "a-cert-manager-io" {
   type         = "A"
 }
 
-resource "google_dns_record_set" "a-prow-infra-cert-manager-io" {
+resource "google_dns_record_set" "alias-cert-manager-dev" {
   project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.cert-manager-io.name
+  managed_zone = google_dns_managed_zone.cert-manager-dev.name
 
-  name         = "prow.infra.cert-manager.io."
-  rrdatas      = [google_compute_global_address.prow_loadbalancer_ip.address]
+  name         = "cert-manager.dev."
+  rrdatas      = ["apex-loadbalancer.netlify.com."]
   ttl          = 300
-  type         = "A"
+  type         = "ALIAS"
 }
 
 resource "google_dns_record_set" "cname-docs-cert-manager-io" {
@@ -73,16 +111,6 @@ resource "google_dns_record_set" "cname-netlify-cert-manager-io" {
   type         = "CNAME"
 }
 
-resource "google_dns_record_set" "cname-oci-cert-manager-io" {
-  project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.cert-manager-io.name
-
-  name         = "oci.cert-manager.io."
-  rrdatas      = ["cert-manager.docker.scarf.sh."]
-  ttl          = 300
-  type         = "CNAME"
-}
-
 resource "google_dns_record_set" "cname-www-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
@@ -91,20 +119,4 @@ resource "google_dns_record_set" "cname-www-cert-manager-io" {
   rrdatas      = ["cert-manager.io."]
   ttl          = 300
   type         = "CNAME"
-}
-
-resource "google_dns_record_set" "mx-cert-manager-io" {
-  project      = module.cert-manager-general.project_id
-  managed_zone = google_dns_managed_zone.cert-manager-io.name
-  
-  name         = "cert-manager.io."
-  rrdatas = [
-    "1 aspmx.l.google.com.",
-    "5 alt1.aspmx.l.google.com.",
-    "5 alt2.aspmx.l.google.com.",
-    "10 alt3.aspmx.l.google.com.",
-    "10 alt4.aspmx.l.google.com.",
-  ]
-  ttl  = 300
-  type = "MX"
 }
