@@ -69,8 +69,7 @@ non-trivial operational challenges which we'd have to face to perform a migratio
 
 cert-manager container images are pushed to Quay via a robot account which is configured in Google Cloud Build.
 
-Other projects (e.g. trust-manager, csi-driver, etc) tend to be built locally and pushed using local credentials. It's a long-term
-ambition to change this in all instances.
+Other projects (e.g. trust-manager, csi-driver, etc) use GitHub actions to automatically build their OCI images and push them to quay.io (using scoped quay.io robot credentials available as GH action secrets).
 
 ### Zoom
 
@@ -98,14 +97,7 @@ might need some adjustments since the Slack usernames are private to each Slack 
 
 ### Netlify
 
-We currently have two Netlify sites, both on different organizations.
-
-- The main site `cert-manager.netlify.app` (named `cert-manager.io`) is the main Netlify site and belongs to the organization "Jetstack Platform" which is owned and paid for by Venafi (it has the Pro tier). This organization is used to publish the website on https://cert-manager.io/. It also creates a preview site for PRs that are opened against the `master` branch; the preview link can be seen in the GitHub checks at the bottom of the PR UI. It is configured though through the Netlify console UI and also through the website repository (`_redirects` file).
-- The secondary site `cert-manager-website.netlify.app` (named `cert-manager-website`) belongs to the organization "cert-manager-maintainers" is uses the free Started plan. This site doesn't serve any purpose at the moment. It will be the destination for the site "[cert-manager.io](http://cert-manager.io/)" once we migrate it away from the "Jetstack Platform" organization. This account's credentials are stored in the cert-manager 1Password team.
-
-All cert-manager maintainers can get access to both organizations "Jetstack Platform" and "cert-manager-maintainers" by using the cert-manager 1Password. 
-
-We will migrate the site [cert-manager.io](http://cert-manager.io/) away from the old org ("Jetstack Platform") to the new org ("cert-manager-maintainers") when possible.
+The main site `cert-manager.io` is served through Netlify and lives in the CNCF-owned "CNCF Projects 2" Netlify organisation. An account with Developer permissions for this website is stored in the cert-manager 1Password team.
 
 ### ArtifactHub
 
@@ -140,8 +132,7 @@ Hosts test infrastructure, release infrastructure, past releases, and DNS for ou
 The [cert-manager GitHub org](https://github.com/cert-manager/) holds all project repos. Configuration is done by admins, and the list of admins should
 match the membership of the cert-manager-maintainers Google group.
 
-We also have a bot - `jetstack-bot` - with high levels of access to the cert-manager org. It may have been manually set up and might require further documentation to
-detail what it does, what it requires and why we have it.
+We also have a bot - `cert-manager-bot` - with high levels of access to the cert-manager org. It is used by prow (eg. [the mounted bot PAT](https://github.com/cert-manager/testing/blob/091d46e46d154f8d77401b108b61383080a80777/prow/cluster/cherrypicker_deployment.yaml#L74-L76)) in combination with the cert-manager-prow GitHub app (eg. [the mounted GH app token](https://github.com/cert-manager/testing/blob/091d46e46d154f8d77401b108b61383080a80777/prow/cluster/tide_deployment.yaml#L58-L60)).
 
 ### CNCF Maintainers
 
@@ -182,10 +173,9 @@ Currently, videos from biweekly meetings are being manually uploaded to YouTube 
 
 Testgrid is hosted [here](https://testgrid.k8s.io/cert-manager) with dashboards for all supported releases.
 
-Configuration is updated with PRs like [this one](https://github.com/kubernetes/test-infra/pull/25229), which are generated
-by [this prow job](https://github.com/cert-manager/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/jobs/testing/testing-trusted.yaml#L63-L89).
+The testgrid config lives in the [testing repo](https://github.com/cert-manager/testing/blob/091d46e46d154f8d77401b108b61383080a80777/config/testgrid/dashboards.yaml).
 
-There's also testgrid config in the [testing repo](https://github.com/cert-manager/testing/blob/b6fea2453d244c7803c59ad2b155e4c4c8ac021f/config/testgrid/dashboards.yaml).
+Testgrid loads the data from a GCS bucket `gs://cert-manager-prow-testgrid/`. A reference to this bucket is configured here: [canary.yaml](https://github.com/kubernetes/test-infra/blob/f866c8dd811c9ed6339d9b3e353a4205a8aa8bbf/config/mergelists/canary.yaml#L13-L14) and [prod.yaml](https://github.com/kubernetes/test-infra/blob/f866c8dd811c9ed6339d9b3e353a4205a8aa8bbf/config/mergelists/prod.yaml#L13-L14).
 
 ### Open Collective
 
