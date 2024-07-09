@@ -10,7 +10,7 @@ module "prow-cluster-trusted" {
   cluster_description = "Test cluster for trusted tests"
 
   cluster_enable_workload_identity = true
-  cluster_enable_http_load_balancing = true
+  cluster_enable_gateway_api = true
 
   node_config = {
     min_count = 0
