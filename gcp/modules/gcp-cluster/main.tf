@@ -74,9 +74,37 @@ resource "google_container_cluster" "cluster" {
     services_secondary_range_name = "services"
   }
 
+  logging_config {
+    enable_components = [
+      "SYSTEM_COMPONENTS",
+      "WORKLOADS",
+      // Control plane
+      "APISERVER",
+      "CONTROLLER_MANAGER",
+      "SCHEDULER"
+    ]
+  }
+
   monitoring_config {
+    enable_components = [
+      "SYSTEM_COMPONENTS",
+      // Control plane
+      "APISERVER",
+      "SCHEDULER",
+      "CONTROLLER_MANAGER",
+      // Kube state metrics
+      "STORAGE",
+      "HPA",
+      "POD",
+      "DAEMONSET",
+      "DEPLOYMENT",
+      "STATEFULSET",
+      // cAdvisor and Kubelet metrics
+      "KUBELET",
+      "CADVISOR"
+    ]
     managed_prometheus {
-      enabled = false
+      enabled = true
     }
   }
 
@@ -117,6 +145,22 @@ resource "google_service_account" "worker_pool_sa" {
   account_id   = "k8s-node"
   display_name = "k8s node Service Account"
   project      = var.project_id
+}
+
+resource "google_project_iam_binding" "worker_pool_sa_logWriter" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  members = [
+    google_service_account.worker_pool_sa.member
+  ]
+}
+
+resource "google_project_iam_binding" "worker_pool_sa_metricWriter" {
+  project = var.project_id
+  role    = "roles/monitoring.metricWriter"
+  members = [
+    google_service_account.worker_pool_sa.member
+  ]
 }
 
 resource "google_container_node_pool" "worker_pool" {
