@@ -108,9 +108,13 @@ resource "google_container_cluster" "cluster" {
     }
   }
 
+  gateway_api_config {
+    channel = var.cluster_enable_gateway_api ? "CHANNEL_STANDARD" : "CHANNEL_DISABLED"
+  }
+
   addons_config {
     http_load_balancing {
-      disabled = !var.cluster_enable_http_load_balancing
+      disabled = !var.cluster_enable_gateway_api
     }
 
     horizontal_pod_autoscaling {

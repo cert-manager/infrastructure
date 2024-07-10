@@ -24,8 +24,8 @@ variable "cluster_enable_workload_identity" {
   type        = bool
   default     = false
 }
-variable "cluster_enable_http_load_balancing" {
-  description = "Whether to enable the HTTP load balancing addon"
+variable "cluster_enable_gateway_api" {
+  description = "Whether to enable the Gateway API on the GKE cluster"
   type        = bool
   default     = false
 }
