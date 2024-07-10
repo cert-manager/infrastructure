@@ -7,3 +7,13 @@ resource "google_compute_global_address" "prow_loadbalancer_ip" {
 
     address_type = "EXTERNAL"
 }
+
+# IP used by the prow Kubernetes Ingress to expose the Triage party UI.
+# This Ingress is annotated with the "kubernetes.io/ingress.global-static-ip-name: triage-infra-cert-manager-io"
+# annotation to use this static IP.
+resource "google_compute_global_address" "triage_loadbalancer_ip" {
+    project = module.cert-manager-tests-trusted.project_id
+    name = "triage-infra-cert-manager-io"
+
+    address_type = "EXTERNAL"
+}
