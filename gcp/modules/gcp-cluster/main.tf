@@ -74,6 +74,16 @@ resource "google_container_cluster" "cluster" {
     services_secondary_range_name = "services"
   }
 
+  control_plane_endpoints_config {
+    dns_endpoint_config {
+      allow_external_traffic = true
+    }
+
+    ip_endpoints_config {
+      enabled = false
+    }
+  }
+
   logging_config {
     enable_components = [
       "SYSTEM_COMPONENTS",
