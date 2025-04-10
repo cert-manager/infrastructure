@@ -5,7 +5,6 @@ locals {
     "user:mael.valais@jetstack.io",
     "user:richard.wall@jetstack.io",
     "user:ashley.davis@jetstack.io",
-    "user:adam.talbot@jetstack.io",
   ])
 
   gcp_region = "europe-west1"
