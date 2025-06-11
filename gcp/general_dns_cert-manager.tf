@@ -101,6 +101,8 @@ resource "google_dns_record_set" "alias-cert-manager-dev" {
   type         = "ALIAS"
 }
 
+# Point the acme.cert-manager.io subdomain, used in annotations,
+# to the docs website.
 resource "google_dns_record_set" "cname-acme-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
@@ -111,6 +113,8 @@ resource "google_dns_record_set" "cname-acme-cert-manager-io" {
   type         = "CNAME"
 }
 
+# Point the controller.cert-manager.io subdomain, used in annotations,
+# to the docs website.
 resource "google_dns_record_set" "cname-controller-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
@@ -131,6 +135,8 @@ resource "google_dns_record_set" "cname-docs-cert-manager-io" {
   type         = "CNAME"
 }
 
+# Point the experimental.cert-manager.io subdomain, used in annotations,
+# to the docs website.
 resource "google_dns_record_set" "cname-experimental-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
@@ -141,6 +147,8 @@ resource "google_dns_record_set" "cname-experimental-cert-manager-io" {
   type         = "CNAME"
 }
 
+# Point the venafi.cert-manager.io subdomain, used in annotations,
+# to the docs website.
 resource "google_dns_record_set" "cname-venafi-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
