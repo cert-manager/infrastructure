@@ -101,11 +101,51 @@ resource "google_dns_record_set" "alias-cert-manager-dev" {
   type         = "ALIAS"
 }
 
+resource "google_dns_record_set" "cname-acme-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "acme.cert-manager.io."
+  rrdatas      = ["cert-manager.netlify.app."]
+  ttl          = 300
+  type         = "CNAME"
+}
+
+resource "google_dns_record_set" "cname-controller-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "controller.cert-manager.io."
+  rrdatas      = ["cert-manager.netlify.app."]
+  ttl          = 300
+  type         = "CNAME"
+}
+
 resource "google_dns_record_set" "cname-docs-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.cert-manager-io.name
 
   name         = "docs.cert-manager.io."
+  rrdatas      = ["cert-manager.netlify.app."]
+  ttl          = 300
+  type         = "CNAME"
+}
+
+resource "google_dns_record_set" "cname-experimental-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "experimental.cert-manager.io."
+  rrdatas      = ["cert-manager.netlify.app."]
+  ttl          = 300
+  type         = "CNAME"
+}
+
+resource "google_dns_record_set" "cname-venafi-cert-manager-io" {
+  project      = module.cert-manager-general.project_id
+  managed_zone = google_dns_managed_zone.cert-manager-io.name
+
+  name         = "venafi.cert-manager.io."
   rrdatas      = ["cert-manager.netlify.app."]
   ttl          = 300
   type         = "CNAME"
