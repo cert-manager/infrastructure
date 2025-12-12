@@ -34,6 +34,12 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# editor and IDE paraphernalia
+.idea
+*.swp
+*.swo
+*~
+
 # misc
 .terraform.lock.hcl
 kubeconfig_cert-manager-cluster
