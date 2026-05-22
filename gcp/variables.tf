@@ -2,9 +2,13 @@ locals {
   # List of users that have permission to stage and publish builds
   cert_manager_release_managers = toset([
     "user:tim.ramlot@jetstack.io",
+    "user:tramlot@paloaltonetworks.com",
     "user:mael.valais@jetstack.io",
+    "user:mvalais@paloaltonetworks.com",
     "user:richard.wall@jetstack.io",
+    # "user:riwall@paloaltonetworks.com", (uncomment when all invitations have been accepted)
     "user:ashley.davis@jetstack.io",
+    "user:ashdavis@paloaltonetworks.com",
   ])
 
   gcp_region = "europe-west1"
