@@ -11,7 +11,7 @@ resource "google_storage_bucket" "cert_manager_booth_bucket" {
 
 // Taken from https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#terraform_1
 resource "google_service_account" "print_your_cert_compute_sa" {
-  project      = module.cert-manager-general.project_id
+  project = module.cert-manager-general.project_id
 
   account_id   = "pyc-compute-instance"
   display_name = "print-your-cert Service Account"
@@ -57,7 +57,7 @@ resource "google_compute_instance" "print_your_cert" {
       // Ephemeral public IP
     }
   }
-  
+
   service_account {
     # Google recommends custom service accounts with `cloud-platform` scope with
     # specific permissions granted via IAM Roles.
@@ -77,7 +77,7 @@ resource "google_compute_instance" "print_your_cert" {
 
 // Taken from https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#terraform_1
 resource "google_service_account" "booth_compute_sa" {
-  project      = module.cert-manager-general.project_id
+  project = module.cert-manager-general.project_id
 
   account_id   = "guestbook-sa"
   display_name = "Booth Service Account"
@@ -141,28 +141,28 @@ resource "google_dns_record_set" "a-print-your-cert-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
 
-  name         = "print-your-cert.cert-manager.io."
-  rrdatas      = [google_compute_instance.print_your_cert.network_interface.0.access_config.0.nat_ip]
-  ttl          = 300
-  type         = "A"
+  name    = "print-your-cert.cert-manager.io."
+  rrdatas = [google_compute_instance.print_your_cert.network_interface.0.access_config.0.nat_ip]
+  ttl     = 300
+  type    = "A"
 }
 
 resource "google_dns_record_set" "a-guestbook-print-your-cert-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
 
-  name         = "guestbook.print-your-cert.cert-manager.io."
-  rrdatas      = [google_compute_instance.guestbook.network_interface.0.access_config.0.nat_ip]
-  ttl          = 300
-  type         = "A"
+  name    = "guestbook.print-your-cert.cert-manager.io."
+  rrdatas = [google_compute_instance.guestbook.network_interface.0.access_config.0.nat_ip]
+  ttl     = 300
+  type    = "A"
 }
 
 resource "google_dns_record_set" "a-readonly-guestbook-print-your-cert-cert-manager-io" {
   project      = module.cert-manager-general.project_id
   managed_zone = google_dns_managed_zone.print-your-cert-cert-manager-io.name
 
-  name         = "readonly-guestbook.print-your-cert.cert-manager.io."
-  rrdatas      = [google_compute_instance.guestbook.network_interface.0.access_config.0.nat_ip]
-  ttl          = 300
-  type         = "A"
+  name    = "readonly-guestbook.print-your-cert.cert-manager.io."
+  rrdatas = [google_compute_instance.guestbook.network_interface.0.access_config.0.nat_ip]
+  ttl     = 300
+  type    = "A"
 }
