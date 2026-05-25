@@ -93,8 +93,10 @@ module "cert-manager-tests-trusted" {
     "roles/storage.admin"           = local.cert_manager_release_managers
     "roles/logging.logWriter"       = [module.prow-cluster-trusted.worker_pool_sa_member]
     "roles/monitoring.metricWriter" = [module.prow-cluster-trusted.worker_pool_sa_member]
-    (google_project_iam_custom_role.prow-gencred-custom-role["cert-manager-tests-trusted"].name) = [
-      google_service_account.prow-gencred.member,
+    # Lets each Prow controller GSA (trusted_prow_controllers.tf) auth via
+    # gke-gcloud-auth-plugin; in-cluster authz is K8s RBAC.
+    "roles/container.clusterViewer" = [
+      for sa in google_service_account.prow-control-plane : sa.member
     ]
   }
 }
@@ -115,8 +117,10 @@ module "cert-manager-tests-untrusted" {
     "roles/owner"                   = local.cert_manager_release_managers
     "roles/logging.logWriter"       = [module.prow-cluster-untrusted.worker_pool_sa_member]
     "roles/monitoring.metricWriter" = [module.prow-cluster-untrusted.worker_pool_sa_member]
-    (google_project_iam_custom_role.prow-gencred-custom-role["cert-manager-tests-untrusted"].name) = [
-      google_service_account.prow-gencred.member,
+    # Lets each Prow controller GSA (trusted_prow_controllers.tf) auth via
+    # gke-gcloud-auth-plugin; in-cluster authz is K8s RBAC.
+    "roles/container.clusterViewer" = [
+      for sa in google_service_account.prow-control-plane : sa.member
     ]
   }
 }
