@@ -20,18 +20,31 @@ resource "google_storage_bucket" "bucket" {
   versioning {
     enabled = var.bucket_versioned
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
-resource "google_storage_bucket_iam_binding" "object-viewers" {
-  bucket = google_storage_bucket.bucket.name
+data "google_iam_policy" "bucket" {
+  dynamic "binding" {
+    for_each = length(var.bucket_viewers) > 0 ? [1] : []
+    content {
+      role    = "roles/storage.objectViewer"
+      members = var.bucket_viewers
+    }
+  }
 
-  role    = "roles/storage.objectViewer"
-  members = var.bucket_viewers
+  dynamic "binding" {
+    for_each = length(var.bucket_admins) > 0 ? [1] : []
+    content {
+      role    = "roles/storage.objectAdmin"
+      members = var.bucket_admins
+    }
+  }
 }
 
-resource "google_storage_bucket_iam_binding" "object-admins" {
-  bucket = google_storage_bucket.bucket.name
-
-  role    = "roles/storage.objectAdmin"
-  members = var.bucket_admins
+resource "google_storage_bucket_iam_policy" "bucket" {
+  bucket      = google_storage_bucket.bucket.name
+  policy_data = data.google_iam_policy.bucket.policy_data
 }

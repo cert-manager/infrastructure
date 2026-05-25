@@ -86,7 +86,7 @@ resource "google_service_account" "booth_compute_sa" {
 resource "google_storage_bucket_iam_member" "bucket_access_policy" {
   bucket     = google_storage_bucket.cert_manager_booth_bucket.name
   role       = "roles/storage.admin"
-  member     = format("serviceAccount:%s", google_service_account.booth_compute_sa.email)
+  member     = google_service_account.booth_compute_sa.member
   depends_on = [google_storage_bucket.cert_manager_booth_bucket]
 }
 

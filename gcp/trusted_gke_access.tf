@@ -43,11 +43,3 @@ resource "google_project_iam_custom_role" "prow-gencred-custom-role" {
   ]
 }
 
-resource "google_project_iam_binding" "prow-gencred-rolebinding" {
-  for_each = google_project_iam_custom_role.prow-gencred-custom-role
-
-  project = each.key
-
-  role    = each.value.name
-  members = [google_service_account.prow-gencred.member]
-}

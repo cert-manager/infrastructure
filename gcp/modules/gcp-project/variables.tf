@@ -14,12 +14,20 @@ variable "project_billing_id" {
   description = "The billing account to associate with the project"
   type        = string
 }
-variable "project_owners" {
+variable "project_apis" {
   type    = set(string)
   default = []
 }
-
-variable "project_apis" {
-  type    = set(string)
+variable "project_iam" {
+  description = "Authoritative IAM bindings for the project. Map of role -> list of members."
+  type        = map(list(string))
+  default     = {}
+}
+variable "audit_configs" {
+  description = "Audit log configurations for the project."
+  type = list(object({
+    service   = string
+    log_types = list(string)
+  }))
   default = []
 }

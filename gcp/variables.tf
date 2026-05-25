@@ -10,6 +10,9 @@ locals {
     "user:ashley.davis@jetstack.io",
     "user:ashdavis@paloaltonetworks.com",
   ])
+  cert_manager_release_managers_invitee = toset([
+    "user:riwall@paloaltonetworks.com",
+  ])
 
   gcp_region = "europe-west1"
 
