@@ -26,7 +26,7 @@ module "release-bucket" {
       # overwrite existing files.
       # More information on roles can be found here:
       # https://cloud.google.com/iam/docs/understanding-roles#storage-roles
-      local.cert_manager_release_gcb_service_account,
+      google_service_account.cert-manager-release-gcb.member,
     ],
   )
 }
@@ -60,7 +60,6 @@ module "trusted-testgrid-bucket" {
     "serviceAccount:updater@k8s-testgrid.iam.gserviceaccount.com",
   ]
   bucket_admins = setunion(
-
     local.cert_manager_release_managers,
     [google_service_account.testgrid-updater.member],
   )

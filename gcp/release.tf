@@ -1,6 +1,8 @@
-locals {
-  // The service account used by Cloud Build (see https://console.cloud.google.com/cloud-build/settings/service-account?project=cert-manager-release).
-  cert_manager_release_gcb_service_account = format("serviceAccount:%s@cloudbuild.gserviceaccount.com", module.cert-manager-release.number)
+// Custom service account used by Cloud Build for cert-manager release jobs.
+resource "google_service_account" "cert-manager-release-gcb" {
+  project      = module.cert-manager-release.project_id
+  account_id   = "cert-manager-release-gcb"
+  display_name = "Cloud Build SA for cert-manager release jobs"
 }
 
 #####
@@ -47,7 +49,7 @@ resource "google_kms_crypto_key_iam_binding" "cert-manager-release_secret-key-de
   # Grant the Cloud Build service account permission to decrypt secrets using
   # the secret key.
   members = [
-    local.cert_manager_release_gcb_service_account,
+    google_service_account.cert-manager-release-gcb.member,
   ]
 }
 
@@ -85,6 +87,6 @@ resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-s
 
   # Signing should be done only by cmrel in cloudbuild jobs
   members = [
-    local.cert_manager_release_gcb_service_account,
+    google_service_account.cert-manager-release-gcb.member,
   ]
 }
