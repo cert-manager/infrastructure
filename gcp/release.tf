@@ -3,33 +3,6 @@ locals {
   cert_manager_release_gcb_service_account = format("serviceAccount:%s@cloudbuild.gserviceaccount.com", module.cert-manager-release.number)
 }
 
-resource "google_service_account" "scheduler_gcb_invoker" {
-  account_id   = "scheduler-gcb-invoker"
-  description  = "Allows cloud-scheduler to invoke GCB jobs"
-  display_name = "scheduler-gcb-invoker"
-  project      = module.cert-manager-release.project_id
-}
-
-resource "google_project_iam_binding" "cert-manager-release_managers" {
-  project = module.cert-manager-release.project_id
-  role    = "roles/cloudbuild.builds.builder"
-
-  members = setunion(
-    # Allow release managers access to all required APIs for interacting with
-    # the Cloud Build service.
-    # More information on this role can be found here:
-    # https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles
-    local.cert_manager_release_managers,
-    # We must explicitly grant the managed GCP service account IAM permission
-    # to launch jobs in the project because the 'iam_binding' type of Terraform
-    # resource is authorative for the role type.
-    [
-      local.cert_manager_release_gcb_service_account,
-      google_service_account.scheduler_gcb_invoker.member,
-    ],
-  )
-}
-
 #####
 ## Define Cloud KMS keyring and related IAM permissions
 #####

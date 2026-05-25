@@ -151,22 +151,6 @@ resource "google_service_account" "worker_pool_sa" {
   project      = var.project_id
 }
 
-resource "google_project_iam_binding" "worker_pool_sa_logWriter" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
-  members = [
-    google_service_account.worker_pool_sa.member
-  ]
-}
-
-resource "google_project_iam_binding" "worker_pool_sa_metricWriter" {
-  project = var.project_id
-  role    = "roles/monitoring.metricWriter"
-  members = [
-    google_service_account.worker_pool_sa.member
-  ]
-}
-
 resource "google_container_node_pool" "worker_pool" {
   name = "worker-pool-001"
 
