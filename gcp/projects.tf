@@ -67,11 +67,11 @@ module "cert-manager-release" {
     # Allow release managers access to all required APIs for interacting with
     # the Cloud Build service.
     # https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles
-    # We must explicitly grant the managed GCP service account IAM permission
-    # to launch jobs in the project because this role is authoritatively managed.
+    # We must explicitly grant the user-managed Cloud Build service account
+    # permission to launch jobs because this role binding is authoritative.
     "roles/cloudbuild.builds.builder" = setunion(
       local.cert_manager_release_managers,
-      [local.cert_manager_release_gcb_service_account],
+      [google_service_account.cert-manager-release-gcb.member],
     )
   }
 }
