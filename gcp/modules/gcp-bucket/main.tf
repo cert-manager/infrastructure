@@ -36,6 +36,14 @@ data "google_iam_policy" "bucket" {
   }
 
   dynamic "binding" {
+    for_each = length(var.bucket_writers) > 0 ? [1] : []
+    content {
+      role    = "roles/storage.objectUser"
+      members = var.bucket_writers
+    }
+  }
+
+  dynamic "binding" {
     for_each = length(var.bucket_admins) > 0 ? [1] : []
     content {
       role    = "roles/storage.objectAdmin"

@@ -25,6 +25,10 @@ variable "bucket_viewers" {
   type    = set(string)
   default = []
 }
+variable "bucket_writers" {
+  type    = set(string)
+  default = []
+}
 variable "bucket_admins" {
   type    = set(string)
   default = []
