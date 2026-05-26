@@ -112,6 +112,15 @@ resource "google_container_cluster" "cluster" {
     channel = var.cluster_enable_gateway_api ? "CHANNEL_STANDARD" : "CHANNEL_DISABLED"
   }
 
+  control_plane_endpoints_config {
+    dns_endpoint_config {
+      allow_external_traffic = true
+    }
+    ip_endpoints_config {
+      enabled = false
+    }
+  }
+
   addons_config {
     http_load_balancing {
       disabled = !var.cluster_enable_gateway_api
