@@ -43,7 +43,9 @@ module "trusted-artifacts-bucket" {
   bucket_writers = [
     # The crier application needs access to the bucket
     google_service_account.prow-control-plane["crier"].member,
-    # Let prow jobs push their logs to the bucket (both default prow job service accounts and the testgrid updater service account)
+    # Let prow jobs push their logs to the bucket
+    # By default prow jobs use the prowjob-default service account, but some
+    # jobs use a custom service account, so we need to grant access to both.
     google_service_account.prowjob-default-trusted.member,
     google_service_account.prowjob-default-untrusted.member,
     google_service_account.testgrid-updater.member,
