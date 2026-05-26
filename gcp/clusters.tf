@@ -30,6 +30,8 @@ module "prow-cluster-untrusted" {
   cluster_name        = "prow-untrusted"
   cluster_description = "Test cluster for untrusted tests"
 
+  cluster_enable_workload_identity = true
+
   node_config = {
     min_count = 0
     max_count = 10

@@ -44,7 +44,14 @@ module "trusted-artifacts-bucket" {
   ]
   bucket_admins = setunion(
     local.cert_manager_release_managers,
-    [google_service_account.prow-gcs-publisher.member],
+    [
+      # The crier application needs access to the bucket
+      google_service_account.prow-control-plane["crier"].member,
+      # Let prow jobs push their logs to the bucket (both default prow job service accounts and the testgrid updater service account)
+      google_service_account.prowjob-default-trusted.member,
+      google_service_account.prowjob-default-untrusted.member,
+      google_service_account.testgrid-updater.member,
+    ],
   )
 }
 
