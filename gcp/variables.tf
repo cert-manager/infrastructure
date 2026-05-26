@@ -6,12 +6,9 @@ locals {
     "user:mael.valais@jetstack.io",
     "user:mvalais@paloaltonetworks.com",
     "user:richard.wall@jetstack.io",
-    # "user:riwall@paloaltonetworks.com", (uncomment when all invitations have been accepted)
+    "user:riwall@paloaltonetworks.com",
     "user:ashley.davis@jetstack.io",
     "user:ashdavis@paloaltonetworks.com",
-  ])
-  cert_manager_release_managers_invitee = toset([
-    "user:riwall@paloaltonetworks.com",
   ])
 
   gcp_region = "europe-west1"

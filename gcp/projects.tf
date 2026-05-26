@@ -28,8 +28,7 @@ module "cert-manager-general" {
     "storage.googleapis.com",
   ])
   project_iam = {
-    "roles/owner"                               = local.cert_manager_release_managers
-    "roles/resourcemanager.projectOwnerInvitee" = local.cert_manager_release_managers_invitee
+    "roles/owner" = local.cert_manager_release_managers
     "roles/storage.admin" = setunion(
       local.cert_manager_release_managers,
       [google_service_account.booth_compute_sa.member]
@@ -61,9 +60,8 @@ module "cert-manager-release" {
     },
   ]
   project_iam = {
-    "roles/owner"                               = local.cert_manager_release_managers
-    "roles/resourcemanager.projectOwnerInvitee" = local.cert_manager_release_managers_invitee
-    "roles/storage.admin"                       = local.cert_manager_release_managers
+    "roles/owner"         = local.cert_manager_release_managers
+    "roles/storage.admin" = local.cert_manager_release_managers
     # Allow release managers access to all required APIs for interacting with
     # the Cloud Build service.
     # https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles
@@ -91,11 +89,10 @@ module "cert-manager-tests-trusted" {
     "storage.googleapis.com",
   ])
   project_iam = {
-    "roles/owner"                               = local.cert_manager_release_managers
-    "roles/resourcemanager.projectOwnerInvitee" = local.cert_manager_release_managers_invitee
-    "roles/storage.admin"                       = local.cert_manager_release_managers
-    "roles/logging.logWriter"                   = [module.prow-cluster-trusted.worker_pool_sa_member]
-    "roles/monitoring.metricWriter"             = [module.prow-cluster-trusted.worker_pool_sa_member]
+    "roles/owner"                   = local.cert_manager_release_managers
+    "roles/storage.admin"           = local.cert_manager_release_managers
+    "roles/logging.logWriter"       = [module.prow-cluster-trusted.worker_pool_sa_member]
+    "roles/monitoring.metricWriter" = [module.prow-cluster-trusted.worker_pool_sa_member]
     (google_project_iam_custom_role.prow-gencred-custom-role["cert-manager-tests-trusted"].name) = [
       google_service_account.prow-gencred.member,
     ]
@@ -115,10 +112,9 @@ module "cert-manager-tests-untrusted" {
     "pubsub.googleapis.com",
   ])
   project_iam = {
-    "roles/owner"                               = local.cert_manager_release_managers
-    "roles/resourcemanager.projectOwnerInvitee" = local.cert_manager_release_managers_invitee
-    "roles/logging.logWriter"                   = [module.prow-cluster-untrusted.worker_pool_sa_member]
-    "roles/monitoring.metricWriter"             = [module.prow-cluster-untrusted.worker_pool_sa_member]
+    "roles/owner"                   = local.cert_manager_release_managers
+    "roles/logging.logWriter"       = [module.prow-cluster-untrusted.worker_pool_sa_member]
+    "roles/monitoring.metricWriter" = [module.prow-cluster-untrusted.worker_pool_sa_member]
     (google_project_iam_custom_role.prow-gencred-custom-role["cert-manager-tests-untrusted"].name) = [
       google_service_account.prow-gencred.member,
     ]
