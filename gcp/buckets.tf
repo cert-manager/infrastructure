@@ -16,19 +16,17 @@ module "release-bucket" {
   bucket_name = "cert-manager-release"
 
   bucket_viewers = []
-  bucket_admins = setunion(
-    local.cert_manager_release_managers,
-    [
-      # Grant the GCB service account admin permissions on objects in the bucket.
-      # This grants full control of objects, including listing, creating,
-      # viewing, and deleting objects.
-      # objectCreator is not sufficient, as the tool may need to delete or
-      # overwrite existing files.
-      # More information on roles can be found here:
-      # https://cloud.google.com/iam/docs/understanding-roles#storage-roles
-      google_service_account.cert-manager-release-gcb.member,
-    ],
-  )
+  bucket_writers = [
+    # Grant the GCB service account write permissions on objects in the bucket.
+    # This grants full control of objects, including listing, creating,
+    # viewing, and deleting objects.
+    # objectCreator is not sufficient, as the tool may need to delete or
+    # overwrite existing files.
+    # More information on roles can be found here:
+    # https://cloud.google.com/iam/docs/understanding-roles#storage-roles
+    google_service_account.cert-manager-release-gcb.member,
+  ]
+  bucket_admins = local.cert_manager_release_managers
 }
 
 module "trusted-artifacts-bucket" {
@@ -42,17 +40,15 @@ module "trusted-artifacts-bucket" {
   bucket_viewers = [
     "allUsers"
   ]
-  bucket_admins = setunion(
-    local.cert_manager_release_managers,
-    [
-      # The crier application needs access to the bucket
-      google_service_account.prow-control-plane["crier"].member,
-      # Let prow jobs push their logs to the bucket (both default prow job service accounts and the testgrid updater service account)
-      google_service_account.prowjob-default-trusted.member,
-      google_service_account.prowjob-default-untrusted.member,
-      google_service_account.testgrid-updater.member,
-    ],
-  )
+  bucket_writers = [
+    # The crier application needs access to the bucket
+    google_service_account.prow-control-plane["crier"].member,
+    # Let prow jobs push their logs to the bucket (both default prow job service accounts and the testgrid updater service account)
+    google_service_account.prowjob-default-trusted.member,
+    google_service_account.prowjob-default-untrusted.member,
+    google_service_account.testgrid-updater.member,
+  ]
+  bucket_admins = local.cert_manager_release_managers
 }
 
 module "trusted-testgrid-bucket" {
@@ -68,8 +64,8 @@ module "trusted-testgrid-bucket" {
     # The deck application needs access to the bucket
     google_service_account.prow-control-plane["deck"].member,
   ]
-  bucket_admins = setunion(
-    local.cert_manager_release_managers,
-    [google_service_account.testgrid-updater.member],
-  )
+  bucket_writers = [
+    google_service_account.testgrid-updater.member,
+  ]
+  bucket_admins = local.cert_manager_release_managers
 }
