@@ -1,5 +1,3 @@
-# NOTE: we still have to promote the Loadbalancer IP to a static ip (see https://docs.prow.k8s.io/docs/getting-started-deploy/#configure-ssl)
-# I haven't figured out yet how to do this using terraform.
 module "prow-cluster-trusted" {
   source = "./modules/gcp-cluster/"
 
