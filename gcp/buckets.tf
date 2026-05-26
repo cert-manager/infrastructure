@@ -65,6 +65,8 @@ module "trusted-testgrid-bucket" {
   bucket_viewers = [
     "serviceAccount:testgrid-canary@k8s-testgrid.iam.gserviceaccount.com",
     "serviceAccount:updater@k8s-testgrid.iam.gserviceaccount.com",
+    # The deck application needs access to the bucket
+    google_service_account.prow-control-plane["deck"].member,
   ]
   bucket_admins = setunion(
     local.cert_manager_release_managers,
