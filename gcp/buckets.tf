@@ -47,6 +47,7 @@ module "trusted-artifacts-bucket" {
     google_service_account.prowjob-default-trusted.member,
     google_service_account.prowjob-default-untrusted.member,
     google_service_account.testgrid-updater.member,
+    google_service_account.image-builder.member,
   ]
   bucket_admins = local.cert_manager_release_managers
 }

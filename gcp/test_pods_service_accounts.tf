@@ -10,6 +10,9 @@
 #   it via Config Merger
 #   (https://github.com/GoogleCloudPlatform/testgrid/tree/master/cmd/config_merge).
 #   See https://github.com/kubernetes/test-infra/blob/master/testgrid/merging.md
+# - image-builder: used by image-building postsubmit ProwJobs to push container
+#   images to the cert-manager-infra-images Artifact Registry without a static
+#   service account key.
 
 resource "google_service_account" "prowjob-default-trusted" {
   account_id   = "prowjob-default"
@@ -50,5 +53,19 @@ resource "google_service_account_iam_binding" "testgrid-updater-workload-identit
   role               = "roles/iam.workloadIdentityUser"
   members = [
     "serviceAccount:${module.prow-cluster-trusted.workload_pool}[test-pods/testgrid-updater]"
+  ]
+}
+
+resource "google_service_account" "image-builder" {
+  account_id   = "image-builder"
+  display_name = "Service account for image-building ProwJobs that push to Artifact Registry"
+  project      = module.cert-manager-tests-trusted.project_id
+}
+
+resource "google_service_account_iam_binding" "image-builder-workload-identity" {
+  service_account_id = google_service_account.image-builder.name
+  role               = "roles/iam.workloadIdentityUser"
+  members = [
+    "serviceAccount:${module.prow-cluster-trusted.workload_pool}[test-pods/image-builder]"
   ]
 }
