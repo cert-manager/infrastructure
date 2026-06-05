@@ -17,6 +17,9 @@ module "prow-cluster-trusted" {
     machine_type = "n1-standard-2"
     disk_size_gb = "25"
     disk_type    = "pd-ssd"
+
+    # We want to make the nodes more reliable; maintainers were saying they were
+    # experiencing Prow issues.
     preemptible  = false
   }
 }
@@ -39,6 +42,6 @@ module "prow-cluster-untrusted" {
     machine_type = "e2-highcpu-16"
     disk_size_gb = "150"
     disk_type    = "pd-ssd"
-    preemptible  = true
+    preemptible  = false
   }
 }

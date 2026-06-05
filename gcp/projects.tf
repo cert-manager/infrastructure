@@ -72,9 +72,10 @@ module "cert-manager-release" {
       # So we need to grant it roles/cloudbuild.builds.editor.
       "serviceAccount:${module.cert-manager-release.number}@cloudbuild.gserviceaccount.com",
     ]
-    "roles/logging.logWriter" = [
-      google_service_account.cert-manager-release-gcb.member,
-    ]
+
+    # Due to configs.logging=CLOUD_LOGGING_ONLY in cert-manager's
+    # gcb/build_cert_manager.yaml.
+    "roles/logging.logWriter" = [google_service_account.cert-manager-release-gcb.member]
   }
 }
 
