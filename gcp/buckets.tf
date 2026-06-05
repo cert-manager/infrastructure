@@ -29,6 +29,18 @@ module "release-bucket" {
   bucket_admins = local.cert_manager_release_managers
 }
 
+module "release-logs-bucket" {
+  source = "./modules/gcp-bucket/"
+
+  project_id  = module.cert-manager-release.project_id
+  location    = local.bucket_location
+  bucket_name = "cert-manager-release-logs"
+  bucket_admins = setunion(
+    local.cert_manager_release_managers,
+    [google_service_account.cert-manager-release-gcb.member],
+  )
+}
+
 module "trusted-artifacts-bucket" {
   source = "./modules/gcp-bucket/"
 
