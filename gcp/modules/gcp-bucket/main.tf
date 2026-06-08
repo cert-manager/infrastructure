@@ -50,6 +50,14 @@ data "google_iam_policy" "bucket" {
       members = var.bucket_admins
     }
   }
+
+  dynamic "binding" {
+    for_each = length(var.admins) > 0 ? [1] : []
+    content {
+      role    = "roles/storage.admin"
+      members = var.admins
+    }
+  }
 }
 
 resource "google_storage_bucket_iam_policy" "bucket" {

@@ -35,10 +35,12 @@ module "release-logs-bucket" {
   project_id  = module.cert-manager-release.project_id
   location    = local.bucket_location
   bucket_name = "cert-manager-release-logs"
-  bucket_admins = setunion(
-    local.cert_manager_release_managers,
-    [google_service_account.cert-manager-release-gcb.member],
-  )
+
+  # Cloud Builds needs roles/storage.admin. The role roles/storage.objectAdmin,
+  # which you get with bucket_admins, isn't enough. See:
+  # https://docs.cloud.google.com/build/docs/securing-builds/store-manage-build-logs#store-custom-bucket
+  admins        = [google_service_account.cert-manager-release-gcb.member]
+  bucket_admins = local.cert_manager_release_managers
 }
 
 module "trusted-artifacts-bucket" {

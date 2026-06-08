@@ -33,3 +33,7 @@ variable "bucket_admins" {
   type    = set(string)
   default = []
 }
+variable "admins" {
+  type    = set(string)
+  default = []
+}
