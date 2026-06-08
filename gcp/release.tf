@@ -83,3 +83,11 @@ resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-s
   # Signing should be done only by cmrel in cloudbuild jobs
   members = [google_service_account.cert-manager-release-gcb.member]
 }
+
+# The signing process also needs to read key metadata (cloudkms.cryptoKeys.get)
+# to fetch the default hash function. signerVerifier doesn't include this permission.
+resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-viewers" {
+  crypto_key_id = google_kms_crypto_key.cert-manager-release_signing-key.id
+  role          = "roles/cloudkms.viewer"
+  members       = [google_service_account.cert-manager-release-gcb.member]
+}
