@@ -40,17 +40,12 @@ resource "google_kms_crypto_key_iam_binding" "cert-manager-release_secret-key-en
   members = local.cert_manager_release_managers
 }
 
-# Define list of users with cryptoKeyDecrypter permissions on the release
-# secret key.
+# The Cloud Build user-specified service account needs permission to decrypt the
+# release secret key.
 resource "google_kms_crypto_key_iam_binding" "cert-manager-release_secret-key-decrypters" {
   crypto_key_id = google_kms_crypto_key.cert-manager-release_secret-key.id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-
-  # Grant the Cloud Build service account permission to decrypt secrets using
-  # the secret key.
-  members = [
-    google_service_account.cert-manager-release-gcb.member,
-  ]
+  members       = [google_service_account.cert-manager-release-gcb.member]
 }
 
 # Key for signing cert-manager release artifacts
@@ -76,7 +71,7 @@ resource "google_kms_crypto_key" "cert-manager-release_signing-key" {
 
 # Define list of users who have permission to sign using this key.
 resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-signers" {
-  crypto_key_id = google_kms_crypto_key.cert-manager-release_secret-key.id
+  crypto_key_id = google_kms_crypto_key.cert-manager-release_signing-key.id
 
   # https://cloud.google.com/kms/docs/reference/permissions-and-roles
   # "roles/cloudkms.signer" doesn't include permission to get the public key, which is required
@@ -86,7 +81,13 @@ resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-s
   role = "roles/cloudkms.signerVerifier"
 
   # Signing should be done only by cmrel in cloudbuild jobs
-  members = [
-    google_service_account.cert-manager-release-gcb.member,
-  ]
+  members = [google_service_account.cert-manager-release-gcb.member]
+}
+
+# The signing process also needs to read key metadata (cloudkms.cryptoKeys.get)
+# to fetch the default hash function. signerVerifier doesn't include this permission.
+resource "google_kms_crypto_key_iam_binding" "cert-manager-release_signing-key-viewers" {
+  crypto_key_id = google_kms_crypto_key.cert-manager-release_signing-key.id
+  role          = "roles/cloudkms.viewer"
+  members       = [google_service_account.cert-manager-release-gcb.member]
 }

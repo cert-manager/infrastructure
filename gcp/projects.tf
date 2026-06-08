@@ -62,15 +62,20 @@ module "cert-manager-release" {
   project_iam = {
     "roles/owner"         = local.cert_manager_release_managers
     "roles/storage.admin" = local.cert_manager_release_managers
-    # Allow release managers access to all required APIs for interacting with
-    # the Cloud Build service.
-    # https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles
-    # We must explicitly grant the user-managed Cloud Build service account
-    # permission to launch jobs because this role binding is authoritative.
-    "roles/cloudbuild.builds.builder" = setunion(
-      local.cert_manager_release_managers,
-      [google_service_account.cert-manager-release-gcb.member],
-    )
+
+    "roles/cloudbuild.builds.editor" = [
+      # When clicking "Run" in the UI or when running `gcloud builds triggers
+      # run`, the legacy Cloud Build SA is still used to trigger the run (because we have
+      # these 3 Organization policies: constraints/cloudbuild.disableCreateDefaultServiceAccount,
+      # constraints/cloudbuild.useComputeServiceAccount and constraints/cloudbuild.useBuildServiceAccount,
+      # see https://docs.cloud.google.com/build/docs/cloud-build-service-account-updates#configure_the_default_service_account_for_an_organization for more info).
+      # So we need to grant it roles/cloudbuild.builds.editor.
+      "serviceAccount:${module.cert-manager-release.number}@cloudbuild.gserviceaccount.com",
+    ]
+
+    # Due to configs.logging=CLOUD_LOGGING_ONLY in cert-manager's
+    # gcb/build_cert_manager.yaml.
+    "roles/logging.logWriter" = [google_service_account.cert-manager-release-gcb.member]
   }
 }
 
