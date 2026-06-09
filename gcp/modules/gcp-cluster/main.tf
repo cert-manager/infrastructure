@@ -8,6 +8,10 @@ terraform {
   required_version = ">= 1.6.1"
 }
 
+locals {
+  workload_pool = "${var.project_id}.svc.id.goog"
+}
+
 resource "google_compute_network" "network" {
   name        = "k8s-${var.cluster_name}-network"
   description = "Network for the ${var.cluster_name} GKE cluster"
@@ -139,11 +143,8 @@ resource "google_container_cluster" "cluster" {
     }
   }
 
-  dynamic "workload_identity_config" {
-    for_each = local.workload_pool != null ? [1] : []
-    content {
-      workload_pool = local.workload_pool
-    }
+  workload_identity_config {
+    workload_pool = local.workload_pool
   }
 
   lifecycle {
@@ -198,11 +199,8 @@ resource "google_container_node_pool" "worker_pool" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
 
-    dynamic "workload_metadata_config" {
-      for_each = var.cluster_enable_workload_identity ? [1] : []
-      content {
-        mode = "GKE_METADATA"
-      }
+    workload_metadata_config {
+      mode = "GKE_METADATA"
     }
   }
 

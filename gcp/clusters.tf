@@ -7,7 +7,6 @@ module "prow-cluster-trusted" {
   cluster_name        = "prow-trusted"
   cluster_description = "Test cluster for trusted tests"
 
-  cluster_enable_workload_identity = true
   cluster_enable_gateway_api       = true
 
   node_config = {
@@ -32,8 +31,6 @@ module "prow-cluster-untrusted" {
   location            = local.gke_zonal_location
   cluster_name        = "prow-untrusted"
   cluster_description = "Test cluster for untrusted tests"
-
-  cluster_enable_workload_identity = true
 
   node_config = {
     min_count = 0
