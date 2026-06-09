@@ -49,7 +49,7 @@ resource "google_container_cluster" "cluster" {
   project  = var.project_id
   location = var.location
 
-  enable_shielded_nodes = false
+  enable_shielded_nodes = true
   enable_legacy_abac    = false
 
   # We can't create a cluster with no node pool defined, but we want to only use
