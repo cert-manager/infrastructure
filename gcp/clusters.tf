@@ -7,7 +7,7 @@ module "prow-cluster-trusted" {
   cluster_name        = "prow-trusted"
   cluster_description = "Test cluster for trusted tests"
 
-  cluster_enable_gateway_api       = true
+  cluster_enable_gateway_api = true
 
   node_config = {
     min_count = 0
@@ -19,7 +19,7 @@ module "prow-cluster-trusted" {
 
     # We want to make the nodes more reliable; maintainers were saying they were
     # experiencing Prow issues.
-    preemptible  = false
+    preemptible = false
   }
 }
 
@@ -35,6 +35,24 @@ module "prow-cluster-untrusted" {
   node_config = {
     min_count = 0
     max_count = 10
+
+    machine_type = "e2-highcpu-16"
+    disk_size_gb = "150"
+    disk_type    = "pd-ssd"
+    preemptible  = false
+  }
+
+  # Isolates the periodic e2e jobs which carry Venafi credentials from the
+  # presubmit jobs, which run unreviewed PR code on privileged (dind) pods
+  # on the shared worker pool.
+  #
+  # Kubernetes' own Prow build cluster uses the same mechanism (dedicated
+  # tainted node pools which jobs opt into with a toleration):
+  # https://github.com/kubernetes/k8s.io/blob/33e1891fe1a3d361abf01e69bddd36dd80b80049/infra/gcp/terraform/k8s-infra-prow-build/main.tf#L106-L132
+  # https://github.com/kubernetes/test-infra/blob/86f26aa5bc157b43fe67911b29dc20d8a9aff3f4/config/jobs/kubernetes/sig-scalability/sig-scalability-periodic-jobs.yaml#L694-L697
+  credentialed_node_config = {
+    min_count = 0
+    max_count = 2
 
     machine_type = "e2-highcpu-16"
     disk_size_gb = "150"

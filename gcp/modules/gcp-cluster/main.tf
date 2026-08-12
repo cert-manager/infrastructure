@@ -212,3 +212,70 @@ resource "google_container_node_pool" "worker_pool" {
     ]
   }
 }
+
+# A dedicated node pool for Prow jobs with access to live credentials; see
+# variable "credentialed_node_config" for the rationale. Jobs opt in with a
+# matching nodeSelector and toleration; the taint keeps every other job off
+# these nodes.
+resource "google_container_node_pool" "credentialed_pool" {
+  count = var.credentialed_node_config == null ? 0 : 1
+
+  name = "credentialed-pool-001"
+
+  project  = var.project_id
+  location = var.location
+  cluster  = google_container_cluster.cluster.name
+
+  autoscaling {
+    min_node_count = var.credentialed_node_config.min_count
+    max_node_count = var.credentialed_node_config.max_count
+  }
+
+  management {
+    auto_repair  = true
+    auto_upgrade = true
+  }
+
+  node_config {
+    image_type = "COS_CONTAINERD"
+
+    gcfs_config {
+      enabled = true
+    }
+    gvnic {
+      enabled = true
+    }
+
+    machine_type = var.credentialed_node_config.machine_type
+    disk_size_gb = var.credentialed_node_config.disk_size_gb
+    disk_type    = var.credentialed_node_config.disk_type
+    preemptible  = var.credentialed_node_config.preemptible
+
+    labels = {
+      dedicated = "credentialed-jobs"
+    }
+    taint {
+      key    = "dedicated"
+      value  = "credentialed-jobs"
+      effect = "NO_SCHEDULE"
+    }
+
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    service_account = google_service_account.worker_pool_sa.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+  }
+
+  # changing initial_node_count forces recreation
+  # ignore changes so that we can manually resize it without rectification on subsequent runs
+  lifecycle {
+    ignore_changes = [
+      initial_node_count
+    ]
+  }
+}
