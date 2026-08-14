@@ -119,9 +119,15 @@ module "cert-manager-tests-untrusted" {
     "pubsub.googleapis.com",
   ])
   project_iam = {
-    "roles/owner"                   = local.cert_manager_release_managers
-    "roles/logging.logWriter"       = [module.prow-cluster-untrusted.worker_pool_sa_member]
-    "roles/monitoring.metricWriter" = [module.prow-cluster-untrusted.worker_pool_sa_member]
+    "roles/owner" = local.cert_manager_release_managers
+    "roles/logging.logWriter" = [
+      module.prow-cluster-untrusted.worker_pool_sa_member,
+      module.prow-cluster-untrusted.credentialed_pool_sa_member,
+    ]
+    "roles/monitoring.metricWriter" = [
+      module.prow-cluster-untrusted.worker_pool_sa_member,
+      module.prow-cluster-untrusted.credentialed_pool_sa_member,
+    ]
     # Lets each Prow controller GSA (trusted_prow_controllers.tf) auth via
     # gke-gcloud-auth-plugin; in-cluster authz is K8s RBAC.
     "roles/container.clusterViewer" = [
