@@ -161,16 +161,64 @@ resource "google_service_account" "worker_pool_sa" {
   project      = var.project_id
 }
 
-resource "google_container_node_pool" "worker_pool" {
-  name = "worker-pool-001"
+# The credentialed pool gets its own service account so that the trust boundary
+# also exists at the GCP IAM layer: any IAM later granted for credentialed jobs
+# (e.g. workload-identity bindings or Secret Manager access) cannot be wielded
+# by unreviewed PR code that escapes onto a worker-pool node and reads the node
+# service account token from the VM metadata server, and Cloud Audit Logs can
+# distinguish the two pools.
+resource "google_service_account" "credentialed_pool_sa" {
+  count = var.credentialed_node_config == null ? 0 : 1
+
+  account_id   = "k8s-node-credentialed"
+  display_name = "k8s node Service Account for the credentialed-jobs node pool"
+  project      = var.project_id
+}
+
+# Both pools share one resource so that node hardening settings cannot drift
+# between them; anything pool-specific lives in this map.
+locals {
+  node_pools = merge(
+    {
+      "worker-pool-001" = {
+        config          = var.node_config
+        service_account = google_service_account.worker_pool_sa.email
+        labels          = {}
+        taints          = []
+      }
+    },
+    var.credentialed_node_config == null ? {} : {
+      # A dedicated node pool for Prow jobs with access to live credentials;
+      # see variable "credentialed_node_config" for the rationale. Jobs opt in
+      # with a matching nodeSelector and toleration, which cert-manager/testing
+      # prowgen injects for any job carrying a credential preset; the taint
+      # keeps every other job off these nodes.
+      "credentialed-pool-001" = {
+        config          = var.credentialed_node_config
+        service_account = google_service_account.credentialed_pool_sa[0].email
+        labels          = { dedicated = "credentialed-jobs" }
+        taints = [{
+          key    = "dedicated"
+          value  = "credentialed-jobs"
+          effect = "NO_SCHEDULE"
+        }]
+      }
+    }
+  )
+}
+
+resource "google_container_node_pool" "pools" {
+  for_each = local.node_pools
+
+  name = each.key
 
   project  = var.project_id
   location = var.location
   cluster  = google_container_cluster.cluster.name
 
   autoscaling {
-    min_node_count = var.node_config.min_count
-    max_node_count = var.node_config.max_count
+    min_node_count = each.value.config.min_count
+    max_node_count = each.value.config.max_count
   }
 
   management {
@@ -188,13 +236,24 @@ resource "google_container_node_pool" "worker_pool" {
       enabled = true
     }
 
-    machine_type = var.node_config.machine_type
-    disk_size_gb = var.node_config.disk_size_gb
-    disk_type    = var.node_config.disk_type
-    preemptible  = var.node_config.preemptible
+    machine_type = each.value.config.machine_type
+    disk_size_gb = each.value.config.disk_size_gb
+    disk_type    = each.value.config.disk_type
+    preemptible  = each.value.config.preemptible
+
+    labels = each.value.labels
+
+    dynamic "taint" {
+      for_each = each.value.taints
+      content {
+        key    = taint.value.key
+        value  = taint.value.value
+        effect = taint.value.effect
+      }
+    }
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = google_service_account.worker_pool_sa.email
+    service_account = each.value.service_account
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
@@ -211,4 +270,10 @@ resource "google_container_node_pool" "worker_pool" {
       initial_node_count
     ]
   }
+}
+
+# The worker pool predates the for_each refactor; keep its state address.
+moved {
+  from = google_container_node_pool.worker_pool
+  to   = google_container_node_pool.pools["worker-pool-001"]
 }

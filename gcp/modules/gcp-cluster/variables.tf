@@ -36,3 +36,24 @@ variable "node_config" {
     preemptible  = bool
   })
 }
+variable "credentialed_node_config" {
+  description = <<-EOT
+    If set, creates an additional node pool, tainted and labeled
+    dedicated=credentialed-jobs, for Prow jobs which have access to live
+    credentials. Scheduling those jobs on their own nodes means a container
+    escape from an ordinary job (e.g. a privileged presubmit running
+    unreviewed PR code) cannot read their secrets via the node's kubelet
+    credentials, which only grant access to secrets of pods scheduled on
+    that node.
+  EOT
+  type = object({
+    min_count = number
+    max_count = number
+
+    machine_type = string
+    disk_size_gb = number
+    disk_type    = string
+    preemptible  = bool
+  })
+  default = null
+}
