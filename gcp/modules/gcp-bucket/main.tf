@@ -21,6 +21,18 @@ resource "google_storage_bucket" "bucket" {
     enabled = var.bucket_versioned
   }
 
+  dynamic "lifecycle_rule" {
+    for_each = var.bucket_expire_after_days > 0 ? [1] : []
+    content {
+      action {
+        type = "Delete"
+      }
+      condition {
+        age = var.bucket_expire_after_days
+      }
+    }
+  }
+
   lifecycle {
     prevent_destroy = true
   }
