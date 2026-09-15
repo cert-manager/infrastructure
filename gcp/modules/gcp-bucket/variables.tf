@@ -37,3 +37,8 @@ variable "admins" {
   type    = set(string)
   default = []
 }
+variable "bucket_expire_after_days" {
+  description = "Delete objects older than this many days. 0 disables expiry."
+  type        = number
+  default     = 0
+}

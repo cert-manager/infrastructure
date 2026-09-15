@@ -29,6 +29,24 @@ module "release-bucket" {
   bucket_admins = local.cert_manager_release_managers
 }
 
+# Nightly release stages built by the ci-cert-manager-master-release-stage
+# ProwJob (cert-manager/release#2). Kept separate from cert-manager-release so
+# a nightly stage can never be mistaken for, or overwrite, a real one.
+module "release-nightly-bucket" {
+  source = "./modules/gcp-bucket/"
+
+  project_id  = module.cert-manager-release.project_id
+  location    = local.bucket_location
+  bucket_name = "cert-manager-release-nightly"
+
+  bucket_expire_after_days = 14
+
+  bucket_writers = [
+    google_service_account.cert-manager-release-gcb.member,
+  ]
+  bucket_admins = local.cert_manager_release_managers
+}
+
 module "release-logs-bucket" {
   source = "./modules/gcp-bucket/"
 
@@ -64,6 +82,7 @@ module "trusted-artifacts-bucket" {
     google_service_account.prowjob-default-untrusted.member,
     google_service_account.testgrid-updater.member,
     google_service_account.image-builder.member,
+    google_service_account.release-stager.member,
   ]
   bucket_admins = local.cert_manager_release_managers
 }

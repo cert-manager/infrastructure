@@ -13,6 +13,10 @@
 # - image-builder: used by image-building postsubmit ProwJobs to push container
 #   images to the cert-manager-infra-images Artifact Registry without a static
 #   service account key.
+# - release-stager: used by the nightly release-stage periodic ProwJob to submit
+#   `cmrel makestage` builds to Cloud Build in the cert-manager-release project.
+#   The build itself runs as cert-manager-release-gcb, which holds the KMS
+#   signing key and bucket access; the ProwJob pod never sees them.
 
 resource "google_service_account" "prowjob-default-trusted" {
   account_id   = "prowjob-default"
@@ -68,4 +72,27 @@ resource "google_service_account_iam_binding" "image-builder-workload-identity" 
   members = [
     "serviceAccount:${module.prow-cluster-trusted.workload_pool}[test-pods/image-builder]"
   ]
+}
+
+resource "google_service_account" "release-stager" {
+  account_id   = "release-stager"
+  display_name = "Service account for the nightly release-stage ProwJob that submits Cloud Build jobs"
+  project      = module.cert-manager-release.project_id
+}
+
+resource "google_service_account_iam_binding" "release-stager-workload-identity" {
+  service_account_id = google_service_account.release-stager.name
+  role               = "roles/iam.workloadIdentityUser"
+  members = [
+    "serviceAccount:${module.prow-cluster-trusted.workload_pool}[test-pods/release-stager]"
+  ]
+}
+
+# Submitting a build that runs as cert-manager-release-gcb requires actAs on
+# that service account. Non-authoritative so it cannot remove grants made
+# outside Terraform on this pre-existing service account.
+resource "google_service_account_iam_member" "release-stager-acts-as-release-gcb" {
+  service_account_id = google_service_account.cert-manager-release-gcb.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = google_service_account.release-stager.member
 }

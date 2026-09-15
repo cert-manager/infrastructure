@@ -71,6 +71,8 @@ module "cert-manager-release" {
       # see https://docs.cloud.google.com/build/docs/cloud-build-service-account-updates#configure_the_default_service_account_for_an_organization for more info).
       # So we need to grant it roles/cloudbuild.builds.editor.
       "serviceAccount:${module.cert-manager-release.number}@cloudbuild.gserviceaccount.com",
+      # The nightly release-stage ProwJob submits `cmrel makestage` builds.
+      google_service_account.release-stager.member,
     ]
 
     # Due to configs.logging=CLOUD_LOGGING_ONLY in cert-manager's
